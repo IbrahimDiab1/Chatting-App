@@ -1,6 +1,5 @@
 package com.liqaa.client.controllers.FXMLcontrollers;
 
-import com.liqaa.client.controllers.FXMLcontrollers.Contact;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

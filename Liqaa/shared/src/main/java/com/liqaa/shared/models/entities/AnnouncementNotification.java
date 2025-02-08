@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class AnnouncementNotification implements Serializable {
-    private int id;
+    private int id; // notification id
     private String title, content;
     private boolean isRead;
     private LocalDateTime sentAt;

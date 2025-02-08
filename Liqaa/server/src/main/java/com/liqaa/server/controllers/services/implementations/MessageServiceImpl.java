@@ -1,13 +1,16 @@
 package com.liqaa.server.controllers.services.implementations;
 
+import com.liqaa.server.controllers.reposotories.implementations.AnnouncementRepoImpl;
 import com.liqaa.server.controllers.reposotories.interfaces.MessageDAO;
 import com.liqaa.server.controllers.reposotories.implementations.MessageDAOImpl;
 import com.liqaa.server.controllers.services.interfaces.MessageService;
+import com.liqaa.shared.models.entities.Announcement;
 import com.liqaa.shared.models.entities.Message;
 import com.liqaa.shared.models.enums.MessageType;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class MessageServiceImpl implements MessageService {
     private static final MessageServiceImpl INSTANCE = new MessageServiceImpl();
@@ -24,6 +27,26 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public List<Message> getMessagesByConversationId(int conversationId) {
         return messageDAO.findByConversationId(conversationId);
+    }
+    @Override
+    public void  createAnnouncement(Announcement announcement)
+    {
+        AnnouncementRepoImpl AnnouncementRepoImplobj=new AnnouncementRepoImpl();
+        try{
+            if (AnnouncementRepoImplobj.createAnnouncement(announcement))
+            {
+                System.out.println("Announcement created");
+            }
+            else
+            {
+                System.out.println("Announcement is not created");
+            }
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     @Override
@@ -57,12 +80,23 @@ public class MessageServiceImpl implements MessageService {
             }
         }
     }
+    @Override
+    public Map<String, Integer> getMessagesPerDay()
+    {
+        Map<String, Integer> MsgNumberPerDay=messageDAO.getMessagesPerDay();
+        return MsgNumberPerDay;
+
+    }
 
     // Main method for testing
     public static void main(String[] args) {
         // Initialize the DAO and Service
         MessageServiceImpl messageService = MessageServiceImpl.getInstance();
 
+        //
+        Map<String, Integer> l= messageService.getMessagesPerDay();
+        for (Map.Entry<String, Integer> entry : l.entrySet()) {
+            System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());}
         // Test data
         int conversationId = 1;
         int senderId = 1;
@@ -106,4 +140,6 @@ public class MessageServiceImpl implements MessageService {
         unreadCount = messageService.getUnreadMessageCount(conversationId, recipientId);
         System.out.println("Number of unread messages after marking as seen: " + unreadCount);
     }
+
+
 }

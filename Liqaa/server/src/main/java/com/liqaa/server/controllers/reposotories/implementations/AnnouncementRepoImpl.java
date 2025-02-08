@@ -11,6 +11,9 @@ import java.util.List;
 import static com.liqaa.server.util.DatabaseManager.*;
 
 public class AnnouncementRepoImpl implements AnnouncementRepo {
+
+
+
     @Override
     public boolean createAnnouncement(Announcement announcement) throws SQLException {
         if (announcement == null) {

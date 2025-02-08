@@ -42,7 +42,8 @@ public  static void main(String args[])
    public boolean isPhoneNumberExists(String phoneNumber)
     {
         String query = "Select * from users where phone_number = ?";
-        try(PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query))
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
         {
                   statement.setString(1,phoneNumber);
                   ResultSet result = statement.executeQuery();
@@ -63,7 +64,8 @@ public  static void main(String args[])
         if (isPhoneNumberExists(phoneNumber)==true)
         {
             String query = "UPDATE users SET is_active = ? WHERE phone_number = ?";
-            try(PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query))
+            try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
             {
                 statement.setBoolean(1, is_Active);
                 statement.setString(2,phoneNumber);
@@ -85,7 +87,8 @@ public  static void main(String args[])
     public boolean isEmailExists(String email)
     {
         String query = "Select * from users where email = ?";
-        try(PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query))
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
         {
             statement.setString(1,email);
             ResultSet result = statement.executeQuery();
@@ -112,7 +115,8 @@ public  static void main(String args[])
                        + "phone_number, name, email, profile_picture, password_hash, "
                        + "gender, country, date_of_birth, bio, current_status, is_active"
                        + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-               try(PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query))
+               try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
                {
 
                    // Set parameters
@@ -152,7 +156,8 @@ public  static void main(String args[])
     {
         boolean result= false;
         String query = "DELETE FROM users WHERE id = ?";
-        try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query))
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
         {
             statement.setInt(1, userId);
             if(statement.executeUpdate()==1)
@@ -174,7 +179,8 @@ public  static void main(String args[])
             //update
             String query = "UPDATE users SET  name = ?,  bio = ?," +
                     " current_status = ? ,profile_picture = ? WHERE id = ?";
-            try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query))
+            try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
             {
 
                 statement.setString(1, user.getDisplayName());
@@ -213,7 +219,8 @@ public  static void main(String args[])
             System.out.println("this user exists");
             //update
             String query = "UPDATE users SET  profile_picture = ? WHERE phone_number = ?";
-            try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query))
+            try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
             {
 
                 ByteArrayInputStream profilePhoto = new ByteArrayInputStream(img);
@@ -241,7 +248,8 @@ public  static void main(String args[])
     {
         String query = "SELECT * FROM users WHERE id = ?";
         User user = new User();
-    try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query))
+    try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
     {
         statement.setInt(1, userId);
         ResultSet result = statement.executeQuery();
@@ -282,7 +290,8 @@ public  static void main(String args[])
         if (isPhoneNumberExists(userPhone))
         {
             System.out.println("This user exists");
-        try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query)) {
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, userPhone);
             ResultSet result = statement.executeQuery();
             if (result.next()) {
@@ -322,7 +331,8 @@ public  static void main(String args[])
         {
             System.out.println("This user exists");
 
-        try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query))
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
         {
             statement.setString(1, phoneNumber);
             ResultSet result = statement.executeQuery();
@@ -344,7 +354,8 @@ public  static void main(String args[])
         {
             String query = "SELECT password_hash FROM users WHERE phone_number = ?";
             // check password
-            try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query))
+            try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
             {
                 statement.setString(1, userPhone);
                 ResultSet result = statement.executeQuery();
@@ -369,7 +380,9 @@ public  static void main(String args[])
     public List<User> getAllUsers()
     {
         String query = "SELECT * FROM users";
-        try (PreparedStatement statement =  DatabaseManager.getConnection().prepareStatement(query)) {
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
+			 {
             ResultSet res = statement.executeQuery();
             List<User> users = new ArrayList<User>();
             while (res.next())
@@ -377,10 +390,10 @@ public  static void main(String args[])
                 {
                     User user = new User();
                     user.setId(res.getInt("id"));
+                    user.setDisplayName(res.getString("name"));
+                    user.setEmail(res.getString("email"));
                     user.setPhoneNumber(res.getString("phone_number"));
                     user.setPasswordHash(res.getString("password_hash"));
-                    user.setEmail(res.getString("email"));
-                    user.setDisplayName(res.getString("name"));
                     user.setGender(Gender.valueOf(res.getString("gender").toUpperCase()));
                     user.setDateofBirth(res.getDate("date_of_birth") != null ? new java.sql.Date(res.getDate("date_of_birth").getTime()) : null);
                     user.setCountry(res.getString("country"));
@@ -413,7 +426,8 @@ public  static void main(String args[])
         Map<String, Integer> countries = new HashMap<>();
         String query = "SELECT country, COUNT(*) " +
                 "AS user_count FROM users GROUP BY country ORDER BY user_count DESC LIMIT 5 ";
-        try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query)) {
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet res = statement.executeQuery();
 
             while (res.next()) {
@@ -430,7 +444,8 @@ public  static void main(String args[])
     public int getNumbersAllUsers() {
         String query = "SELECT COUNT(id) FROM users";
         int count = 0;
-        try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query))
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
         {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -446,7 +461,8 @@ public  static void main(String args[])
     {
         String query = "SELECT COUNT(id) FROM users WHERE gender = 'Male'";
         int count = 0;
-        try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query)) {
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 count = resultSet.getInt(1);
@@ -461,7 +477,8 @@ public  static void main(String args[])
     {
         String query = "SELECT COUNT(id) FROM users WHERE gender = 'Female'";
         int count = 0;
-        try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query)) {
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 count = resultSet.getInt(1);
@@ -476,7 +493,8 @@ public  static void main(String args[])
     {
         String query = "SELECT COUNT(id) FROM users WHERE is_active = '1' ";
         int count = 0;
-        try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query)) {
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
             //check if the resultset has data
            while (resultSet.next()) {
@@ -492,7 +510,8 @@ public  static void main(String args[])
     {
         String query = "SELECT COUNT(id) FROM users WHERE is_active = '0'";
         int count = 0;
-        try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query)) {
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
             //check if the resultset has data
             if (resultSet.next()) {
@@ -509,7 +528,8 @@ public  static void main(String args[])
     {
         String query = "SELECT COUNT(DISTINCT country) AS country_count FROM users";
         int count = 0;
-        try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query)) {
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
            if (resultSet.next()) {
                 count = resultSet.getInt(1);

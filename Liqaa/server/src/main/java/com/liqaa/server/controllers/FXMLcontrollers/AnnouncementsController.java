@@ -1,8 +1,10 @@
 package com.liqaa.server.controllers.FXMLcontrollers;
 
 import com.liqaa.server.Main;
+import com.liqaa.server.controllers.services.implementations.MessageServiceImpl;
 import com.liqaa.server.util.FilePaths;
 import com.liqaa.server.util.SceneManager;
+import com.liqaa.shared.models.entities.Announcement;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
@@ -45,7 +47,17 @@ public class AnnouncementsController {
     }
 
     @javafx.fxml.FXML
-    public void sendAnnouncement(ActionEvent actionEvent) {
+    public void sendAnnouncement(Event actionEvent) {
+
+        try {
+            Announcement AnnouncementObject=new Announcement( titleTextField.getText(),announcementTextField.getText());
+            MessageServiceImpl.getInstance().createAnnouncement(AnnouncementObject);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        titleTextField.clear();
+        announcementTextField.clear();
+
     }
 
     @javafx.fxml.FXML

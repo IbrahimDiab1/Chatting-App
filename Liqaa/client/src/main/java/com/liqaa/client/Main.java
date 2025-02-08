@@ -1,40 +1,38 @@
 package com.liqaa.client;
 
-import com.liqaa.client.network.ServerConnection;
-import com.liqaa.shared.network.Server;
+import com.liqaa.server.controllers.reposotories.implementations.AnnouncementRepoImpl;
+import com.liqaa.shared.models.entities.Announcement;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.rmi.RemoteException;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 
-public class Main extends Application
-{
+public class Main extends Application {
+    private static Scene scene;
+
     @Override
-    public void start(Stage stage) throws IOException
-    {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/liqaa/client/view/fxml/primary.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Liqaa");
+    public void start(Stage stage) throws IOException {
+        scene = new Scene(loadFXML("/com/liqaa/client/view/fxml/SignUp1"), 1024, 768);
+
         stage.setScene(scene);
         stage.show();
-        
-        testServerConnection();
     }
 
-    private void testServerConnection() throws RemoteException {
-        Server server = ServerConnection.getServer();
-        if (server != null) {
-            String message = server.ping();
-            System.out.println("Connected to server successfully. Server responded: " + message);
-        } else {
-            System.err.println("Failed to connect to server.");
-        }
+    public static void setRoot(String fxml) throws IOException {
+        scene.setRoot(loadFXML(fxml));
     }
 
-    public static void main(String[] args)
-    {
-        launch();
+    private static Parent loadFXML(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(fxml + ".fxml"));
+        return fxmlLoader.load();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Salma");
+        Application.launch();
     }
 }

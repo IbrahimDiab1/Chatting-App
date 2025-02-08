@@ -12,10 +12,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MessageDAOImpl implements MessageDAO {
     private static final Logger logger = LoggerFactory.getLogger(MessageDAOImpl.class);
     private Connection connection;
+
 
     public MessageDAOImpl() {
         try {
@@ -198,7 +201,7 @@ public class MessageDAOImpl implements MessageDAO {
         MessageDAOImpl messageDAO = new MessageDAOImpl();
 
         // Test update()
-        Optional<Message> messageOpt = messageDAO.findById(21);
+       /* Optional<Message> messageOpt = messageDAO.findById(21);
         if (messageOpt.isPresent()) {
             Message message = messageOpt.get();
             message.setContent("Updatedddd content");
@@ -210,6 +213,34 @@ public class MessageDAOImpl implements MessageDAO {
 
         // Test delete()
         messageDAO.delete(20);
-        System.out.println("Message deleted.");
+        System.out.println("Message deleted.");*/
+        MessageDAOImpl s=new  MessageDAOImpl();
+        Map<String, Integer> l= s.getMessagesPerDay();
+        for (Map.Entry<String, Integer> entry : l.entrySet()) {
+            System.out.println("Key: " + entry.getKey() + ", Value: " + entry.getValue());
+    }}
+    /**************************** For Statistics **************************/
+    @Override
+    public Map<String, Integer> getMessagesPerDay()
+    {
+        Map<String, Integer> messagesPerDay = new HashMap<>();
+        String query = "SELECT DAYNAME(sent_at) AS day, COUNT(*) AS message_count, DAYOFWEEK(sent_at) AS day_num " +
+                "FROM messages " +
+                "GROUP BY day, day_num " +
+                "ORDER BY FIELD(day, 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday')";
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                String day = resultSet.getString("day");
+                int count = resultSet.getInt("message_count");
+                messagesPerDay.put(day, count);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return messagesPerDay;
     }
+
 }
