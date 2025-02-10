@@ -130,7 +130,7 @@
                         <Insets top="70.0" />
                     </GridPane.margin>
                     <children>
-                        <HBox prefHeight="40.0" prefWidth="380.0" style="-fx-background-color: rgba(56,78,106,0.34); -fx-background-radius: 20;">
+                        <HBox prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: rgba(56,78,106,0.34); -fx-background-radius: 20;">
                             <children>
                                 <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -140,28 +140,31 @@
                                         <Insets left="15.0" top="6.0" />
                                     </HBox.margin>
                                 </ImageView>
-                                <TextField prefHeight="40.0" prefWidth="380.0" promptText="Search Here..." style="-fx-background-color: transparent; -fx-text-fill: #323068; -fx-prompt-text-fill: #323068;">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </TextField>
+                                <TextField fx:id="searchField" promptText="Search Here..." styleClass="search-field" />
                             </children>
                         </HBox>
-                        <Button fx:id="removeCategoryBtn" mnemonicParsing="false" onAction="#removeCategoryAction" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #384E6A; -fx-background-radius: 20; -fx-padding: 2px 5px;" text="Remove Category" textFill="WHITE">
+                        <Button fx:id="addContactBtn" mnemonicParsing="false" onAction="#addContactAction" prefHeight="40.0" prefWidth="140.0" style="-fx-background-color: #384E6A; -fx-background-radius: 20; -fx-padding: 2px 5px;" text="Add Contact" textFill="WHITE">
                             <font>
                                 <Font name="Arial Bold" size="14.0" />
                             </font>
                         </Button>
-                        <Button fx:id="addContactBtn" mnemonicParsing="false" onAction="#addContactAction" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #384E6A; -fx-background-radius: 20; -fx-padding: 2px 5px;" text="Add Contact" textFill="WHITE">
+                        <Button fx:id="addGroupBtn" mnemonicParsing="false" onAction="#addGroupAction" prefHeight="40.0" prefWidth="140.0" style="-fx-background-color: #384E6A; -fx-background-radius: 20; -fx-padding: 2px 5px;" text="Add Group" textFill="WHITE">
                             <font>
                                 <Font name="Arial Bold" size="14.0" />
                             </font>
                         </Button>
-                        <Button fx:id="addCategoryBtn" mnemonicParsing="false" onAction="#addCategoryAction" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #384E6A; -fx-background-radius: 20; -fx-padding: 2px 5px;" text="Add Category" textFill="WHITE">
+
+                        <Button fx:id="addCategoryBtn" mnemonicParsing="false" onAction="#addCategoryAction" prefHeight="40.0" prefWidth="140.0" style="-fx-background-color: #384E6A; -fx-background-radius: 20; -fx-padding: 2px 5px;" text="Add Category" textFill="WHITE">
                             <font>
                                 <Font name="Arial Bold" size="14.0" />
                             </font>
                         </Button>
+                        <Button fx:id="removeCategoryBtn" mnemonicParsing="false" onAction="#removeCategoryAction" prefHeight="40.0" prefWidth="170.0" style="-fx-background-color: #384E6A; -fx-background-radius: 20; -fx-padding: 2px 5px;" text="Remove Category" textFill="WHITE">
+                            <font>
+                                <Font name="Arial Bold" size="14.0" />
+                            </font>
+                        </Button>
+
                     </children>
                 </HBox>
                 <Line endX="727.0" startX="-100.0" stroke="#cdcdcd" GridPane.rowIndex="1" />
@@ -172,17 +175,17 @@
                                 <Insets top="10" right="10" bottom="10" left="10"/>
                             </padding>
                             <children>
-                                <Text text="Name" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;"/>
-                                <Region prefWidth="130"/>
-                                <Text text="Phone Number" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;"/>
-                                <Region prefWidth="40"/>
-                                <Text text="Bio" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;"/>
-                                <Region prefWidth="180"/>
-                                <Text text="Status" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;"/>
-                                <Region prefWidth="40"/>
-                                <Text text="Category" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;"/>
-                                <Region prefWidth="80"/>
-                                <Text text="Action" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;"/>
+                                <Text text="Name" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" HBox.hgrow="ALWAYS" />
+                                <Region prefWidth="150"/> <!-- تقليل المسافة بين العناصر -->
+                                <Text text="Phone" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" HBox.hgrow="ALWAYS" />
+                                <Region prefWidth="65"/> <!-- تقليل المسافة بين العناصر -->
+                                <Text text="Bio" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" HBox.hgrow="ALWAYS" />
+                                <Region prefWidth="125"/> <!-- تقليل المسافة بين العناصر -->
+                                <Text text="Status" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" HBox.hgrow="ALWAYS" />
+                                <Region prefWidth="45"/> <!-- تقليل المسافة بين العناصر -->
+                                <Text text="Category" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" HBox.hgrow="ALWAYS" />
+                                <Region prefWidth="70"/> <!-- تقليل المسافة بين العناصر -->
+                                <Text text="Action" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" HBox.hgrow="ALWAYS" />
                             </children>
                         </HBox>
                         <ListView fx:id="contactsList" prefHeight="360.0" prefWidth="798.0" style="-fx-padding: 10; -fx-border-radius: 15; -fx-background-radius: 15;">
@@ -192,7 +195,6 @@
                         </ListView>
                     </children>
                 </VBox>
-                <Pagination prefHeight="73.0" prefWidth="940.0" GridPane.rowIndex="3" />
             </children>
             <BorderPane.margin>
                 <Insets bottom="10.0" left="40.0" right="38.0" top="-30.0" />

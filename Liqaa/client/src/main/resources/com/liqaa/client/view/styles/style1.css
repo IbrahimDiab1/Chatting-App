@@ -2,22 +2,59 @@
 .root {
     -fx-font-family: 'Arial';
     -fx-base: #384E6A;
-    -fx-background: #f4f4f4;
+    -fx-background: linear-gradient(to bottom, #f4f4f4, #e0e0e0);
 }
-
-/* تنسيقات الـ ListView */
+/* تنسيقات الـ ListView والـ CheckBox */
 .list-view {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-padding: 0;
+    -fx-background-color: white;
+    -fx-border-color: #384E6A;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
 }
 
 .list-cell {
     -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-padding: 10px;
-    -fx-font-size: 14px;
     -fx-text-fill: #384E6A;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: rgba(56, 78, 106, 0.1);
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: rgba(56, 78, 106, 0.2);
+}
+
+.list-cell .hbox {
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+}
+
+.list-cell .image-view {
+    -fx-fit-height: 25px;
+    -fx-fit-width: 25px;
+}
+
+.list-cell .text {
+    -fx-fill: #384E6A;
+    -fx-font-size: 14px;
+}
+
+.check-box {
+    -fx-text-fill: #384E6A;
+    -fx-font-size: 14px;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #384E6A;
+    -fx-border-color: #384E6A;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
 }
 
 .list-cell:filled:hover {
@@ -67,9 +104,9 @@
     -fx-opacity: 0.8;
 }
 
-/* تنسيقات الأزرار */
+/* تنسيقات الأزرار مع تدرجات ألوان وأنيمشنات */
 .button {
-    -fx-background-color: #384E6A;
+    -fx-background-color: linear-gradient(to bottom, #384E6A, #2a3a4f);
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
@@ -77,33 +114,44 @@
     -fx-padding: 8px 16px;
     -fx-background-radius: 20px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 1);
+    -fx-transition: all 0.3s ease;
 }
 
 .button:hover {
-    -fx-background-color: rgba(56, 78, 106, 0.9);
+    -fx-background-color: linear-gradient(to bottom, #2a3a4f, #384E6A);
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0, 0, 2);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.button:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);
 }
 
 .button#removeCategoryBtn {
-    -fx-background-color: #ff4444;
+    -fx-background-color: linear-gradient(to bottom, #ff4444, #cc3636);
 }
 
 .button#removeCategoryBtn:hover {
-    -fx-background-color: rgba(255, 68, 68, 0.9);
+    -fx-background-color: linear-gradient(to bottom, #cc3636, #ff4444);
 }
 
-/* تنسيقات حقل البحث */
+/* تنسيقات حقل البحث مع إصلاحات */
 .text-field {
     -fx-background-color: white;
     -fx-border-color: #384E6A;
     -fx-border-width: 1px;
-    -fx-border-radius: 5px;
-    -fx-padding: 5px;
+    -fx-border-radius: 20px; /* رجوع للشكل المدور */
+    -fx-padding: 5px 10px;
     -fx-font-size: 14px;
+    -fx-transition: all 0.3s ease;
 }
 
 .text-field:focused {
-    -fx-border-color: #2c3e50;
+    -fx-background-color: transparent; /* إزالة الباك جراوند الأبيض */
+    -fx-border-color: #2a3a4f; /* لون البوردر عند الفوكس */
 }
 
 /* تنسيقات الـ HBox الخاص بحقل البحث */
@@ -115,7 +163,7 @@
 
 /* تنسيقات الـ VBox */
 .vbox {
-    -fx-background-color: #384E6A;
+    -fx-background-color: linear-gradient(to bottom, #384E6A, #2a3a4f);
 }
 
 /* تنسيقات الصور */
@@ -136,58 +184,9 @@
     -fx-stroke: #cdcdcd;
 }
 
-/* تنسيقات الـ Pagination */
-.pagination {
-    -fx-background-color: transparent;
-    -fx-page-information-visible: false;
-}
-
-.pagination .button {
-    -fx-background-color: transparent;
-    -fx-text-fill: #384E6A;
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-border-radius: 5px;
-    -fx-border-color: #384E6A;
-    -fx-border-width: 1px;
-    -fx-padding: 5px 10px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 1);
-}
-
-.pagination .button:hover {
-    -fx-text-fill: #FFFFFF;
-    -fx-background-color: #384E6A;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0, 0, 2);
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-    -fx-transition: all 0.3s ease;
-}
-
-.pagination .button:selected {
-    -fx-background-color: rgba(56, 78, 106, 0.2);
-    -fx-text-fill: #384E6A;
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
-}
-
-.pagination .left-arrow, .pagination .right-arrow {
-    -fx-background-color: transparent;
-    -fx-text-fill: #384E6A;
-    -fx-font-size: 14px;
-    -fx-border-radius: 5px;
-    -fx-border-color: #384E6A;
-    -fx-border-width: 1px;
-    -fx-padding: 5px 10px;
-}
-
-.pagination .left-arrow:hover, .pagination .right-arrow:hover {
-    -fx-background-color: rgba(56, 78, 106, 0.1);
-    -fx-text-fill: #384E6A;
-}
-
 /* تنسيقات الـ Header */
 .header-hbox {
-    -fx-background-color: #384E6A;
+    -fx-background-color: linear-gradient(to bottom, #384E6A, #2a3a4f);
     -fx-padding: 15px;
     -fx-spacing: 20px;
     -fx-alignment: center-left;
@@ -204,20 +203,26 @@
     -fx-padding: 0 20px;
 }
 
+
+
+
+
 /* تنسيقات الدايلوج */
 .dialog-pane {
-    -fx-background-color: #f4f4f4;
+    -fx-background-color: #ffffff;
     -fx-border-color: #384E6A;
     -fx-border-width: 2px;
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
+    -fx-padding: 20px;
 }
 
 .dialog-pane .header-panel {
-    -fx-background-color: #384E6A;
-    -fx-border-radius: 10px 10px 0 0;
-    -fx-background-radius: 10px 10px 0 0;
+    -fx-background-color: linear-gradient(to bottom, #384E6A, #2a3a4f);
+    -fx-border-radius: 15px 15px 0 0;
+    -fx-background-radius: 15px 15px 0 0;
+    -fx-padding: 15px;
 }
 
 .dialog-pane .header-panel .label {
@@ -230,28 +235,169 @@
     -fx-padding: 20px;
     -fx-font-size: 14px;
     -fx-text-fill: #384E6A;
+    -fx-background-color: #f9f9f9;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
 }
 
-.dialog-pane .button {
+/* تنسيقات الـ ListView */
+.list-view {
+    -fx-background-color: white;
+    -fx-border-color: #384E6A;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #384E6A;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: rgba(56, 78, 106, 0.1);
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: rgba(56, 78, 106, 0.2);
+}
+
+.list-cell .hbox {
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+}
+
+.list-cell .image-view {
+    -fx-fit-height: 25px;
+    -fx-fit-width: 25px;
+}
+
+.list-cell .text {
+    -fx-fill: #384E6A;
+    -fx-font-size: 14px;
+}
+
+.check-box {
+    -fx-text-fill: #384E6A;
+    -fx-font-size: 14px;
+}
+
+.check-box:selected .box {
     -fx-background-color: #384E6A;
+    -fx-border-color: #384E6A;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+
+/* تنسيقات أزرار الدايلوج */
+.dialog-pane .button {
+    -fx-background-color: linear-gradient(to bottom, #384E6A, #2a3a4f);
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-padding: 8px 16px;
     -fx-background-radius: 5px;
     -fx-cursor: hand;
+    -fx-transition: all 0.3s ease;
 }
 
 .dialog-pane .button:hover {
-    -fx-background-color: rgba(56, 78, 106, 0.9);
+    -fx-background-color: linear-gradient(to bottom, #2a3a4f, #384E6A);
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 1);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.dialog-pane .button:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);
 }
 
 .dialog-pane .button:cancel {
-    -fx-background-color: #ff4444;
+    -fx-background-color: linear-gradient(to bottom, #ff4444, #cc3636);
     -fx-text-fill: white;
 }
 
 .dialog-pane .button:cancel:hover {
-    -fx-background-color: rgba(255, 68, 68, 0.9);
+    -fx-background-color: linear-gradient(to bottom, #cc3636, #ff4444);
+}
+
+/* تنسيقات الـ Choose Contacts */
+.dialog-pane .list-view {
+    -fx-background-color: white;
+    -fx-border-color: #384E6A;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+.dialog-pane .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #384E6A;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+}
+
+.dialog-pane .list-cell:filled:hover {
+    -fx-background-color: rgba(56, 78, 106, 0.1);
+}
+
+.dialog-pane .list-cell:filled:selected {
+    -fx-background-color: rgba(56, 78, 106, 0.2);
+}
+
+.dialog-pane .list-cell .hbox {
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+}
+
+.dialog-pane .list-cell .image-view {
+    -fx-fit-height: 25px;
+    -fx-fit-width: 25px;
+}
+
+.dialog-pane .list-cell .text {
+    -fx-fill: #384E6A;
+    -fx-font-size: 14px;
+}
+/* تنسيقات حقل البحث */
+.search-field {
+    -fx-background-color: transparent;
+    -fx-border-color: #384E6A;
+    -fx-border-width: 1px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-padding: 8px 12px 8px 35px; /* Padding لترك مسافة للصورة */
+    -fx-font-size: 14px;
+    -fx-text-fill: #384E6A;
+    -fx-prompt-text-fill: #384E6A;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 1);
+    -fx-transition: all 0.3s ease;
+}
+
+.search-field:focused {
+    -fx-border-color: #2a3a4f;
+    -fx-effect: dropshadow(gaussian, rgba(56, 78, 106, 0.3), 10, 0, 0, 0);
+}
+
+.search-field .ikonli-font-icon {
+    -fx-icon-color: #384E6A;
+    -fx-icon-size: 20px;
+    -fx-translate-x: -25px; /* تحريك الصورة لليسار */
+}
+/* تنسيقات الكلمة جنب الصورة */
+.label {
+    -fx-text-fill: #384E6A;
+    -fx-font-size: 14px;
+}
+/* styles.css */
+.rounded-image {
+    -fx-border-radius: 50%; /* حواف دائرية */
+    -fx-background-radius: 50%; /* حواف دائرية للخلفية */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0); /* ظل خفيف */
 }
