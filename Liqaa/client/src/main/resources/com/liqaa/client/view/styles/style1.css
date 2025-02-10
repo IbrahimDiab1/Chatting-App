@@ -138,7 +138,7 @@
     -fx-background-color: linear-gradient(to bottom, #cc3636, #ff4444);
 }
 
-/* تنسيقات حقل البحث مع إصلاحات */
+
 .text-field {
     -fx-background-color: white;
     -fx-border-color: #384E6A;
@@ -154,37 +154,35 @@
     -fx-border-color: #2a3a4f; /* لون البوردر عند الفوكس */
 }
 
-/* تنسيقات الـ HBox الخاص بحقل البحث */
+
 .hbox {
     -fx-background-color: rgba(56, 78, 106, 0.34);
     -fx-background-radius: 20px;
     -fx-padding: 5px;
 }
 
-/* تنسيقات الـ VBox */
+
 .vbox {
     -fx-background-color: linear-gradient(to bottom, #384E6A, #2a3a4f);
 }
 
-/* تنسيقات الصور */
+
 .image-view#logo {
     -fx-fit-height: 60px;
     -fx-fit-width: 112px;
 }
 
-/* تنسيقات النصوص */
 .text#title {
     -fx-fill: #384E6A;
     -fx-font-size: 48px;
     -fx-font-family: 'Arial Bold';
 }
 
-/* تنسيقات الخطوط */
 .line {
     -fx-stroke: #cdcdcd;
 }
 
-/* تنسيقات الـ Header */
+
 .header-hbox {
     -fx-background-color: linear-gradient(to bottom, #384E6A, #2a3a4f);
     -fx-padding: 15px;
@@ -207,7 +205,7 @@
 
 
 
-/* تنسيقات الدايلوج */
+
 .dialog-pane {
     -fx-background-color: #ffffff;
     -fx-border-color: #384E6A;
@@ -240,7 +238,7 @@
     -fx-background-radius: 10px;
 }
 
-/* تنسيقات الـ ListView */
+
 .list-view {
     -fx-background-color: white;
     -fx-border-color: #384E6A;
@@ -293,7 +291,7 @@
     -fx-background-color: white;
 }
 
-/* تنسيقات أزرار الدايلوج */
+
 .dialog-pane .button {
     -fx-background-color: linear-gradient(to bottom, #384E6A, #2a3a4f);
     -fx-text-fill: white;
@@ -327,7 +325,7 @@
     -fx-background-color: linear-gradient(to bottom, #cc3636, #ff4444);
 }
 
-/* تنسيقات الـ Choose Contacts */
+
 .dialog-pane .list-view {
     -fx-background-color: white;
     -fx-border-color: #384E6A;
@@ -365,7 +363,7 @@
     -fx-fill: #384E6A;
     -fx-font-size: 14px;
 }
-/* تنسيقات حقل البحث */
+
 .search-field {
     -fx-background-color: transparent;
     -fx-border-color: #384E6A;
@@ -388,14 +386,14 @@
 .search-field .ikonli-font-icon {
     -fx-icon-color: #384E6A;
     -fx-icon-size: 20px;
-    -fx-translate-x: -25px; /* تحريك الصورة لليسار */
+    -fx-translate-x: -25px;
 }
-/* تنسيقات الكلمة جنب الصورة */
+
 .label {
     -fx-text-fill: #384E6A;
     -fx-font-size: 14px;
 }
-/* styles.css */
+
 .rounded-image {
     -fx-border-radius: 50%; /* حواف دائرية */
     -fx-background-radius: 50%; /* حواف دائرية للخلفية */
