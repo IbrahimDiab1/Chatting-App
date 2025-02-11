@@ -152,7 +152,6 @@ public class NotificationsController implements Initializable {
         curTab = "all";
         notificationList = FXCollections.observableArrayList();
         notificationList.addListener((ListChangeListener<Notification>) change -> {
-            System.out.println(curTab);
             if(curTab.equals("all")){
                 updateUI();
             }

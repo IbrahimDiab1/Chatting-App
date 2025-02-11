@@ -23,7 +23,7 @@ public class DatabaseManager {
 
             // Ensure we load the correct properties
             String jdbcUrl = prop.getProperty("dataSource.url");
-            String username = prop.getProperty("dataSource.username");
+            String username = prop.getProperty("dataSource.user");
             String password = prop.getProperty("dataSource.password");
 
             // Validate properties before proceeding

@@ -270,7 +270,7 @@ public class NotificationRepoImpl implements NotificationRepo {
             String query = "SELECT id, recipient_id, sender_id, announcement_id, type, is_read, sent_at FROM notifications WHERE type = 'ANNOUNCEMENT' AND recipient_id = ?";
             try(PreparedStatement statement = connection.prepareStatement(query);) {
                 statement.setInt(1, id);
-                try(ResultSet resultSet = statement.executeQuery();) {
+                  try(ResultSet resultSet = statement.executeQuery();) {
                     List<Notification> notifications = new ArrayList<>();
                     while (resultSet.next()) {
                         Notification notification = new Notification(resultSet.getInt("id"), resultSet.getInt("recipient_id"), resultSet.getInt("sender_id"), resultSet.getInt("announcement_id"), NotificationType.valueOf(resultSet.getString("type")), resultSet.getBoolean("is_read"), resultSet.getTimestamp("sent_at").toLocalDateTime());
