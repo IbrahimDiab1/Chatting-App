@@ -15,12 +15,12 @@ public class Main extends Application
     @Override
     public void start(Stage stage) throws IOException
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/liqaa/client/view/fxml/notifications.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/liqaa/client/view/fxml/SignIn.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Liqaa");
         stage.setScene(scene);
         stage.show();
-        
+
         testServerConnection();
     }
 
@@ -36,7 +36,7 @@ public class Main extends Application
 
     public static void main(String[] args) throws SQLException, RemoteException {
         //System.out.println(new CurrentUserImpl().getCurrentUser());
-       // System.out.println(NotificationServiceImpl.getInstance().getAllNotifications(3));
+        // System.out.println(NotificationServiceImpl.getInstance().getAllNotifications(3));
 
         launch();
     }
