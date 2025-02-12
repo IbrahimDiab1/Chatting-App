@@ -12,11 +12,9 @@ import java.util.Map;
 
 public interface Server extends Remote
 {
-    void registerClient(Client client, int userId) throws RemoteException;
-
     void unregisterClient(int userId) throws RemoteException;
 
-    public User signIn (String userPhone, String userPassword) throws RemoteException;
+    public User signIn ( Client client, String userPhone, String userPassword) throws RemoteException;
     public boolean logout(String userPhone) throws RemoteException;
     public User signUp(User user) throws RemoteException;
 

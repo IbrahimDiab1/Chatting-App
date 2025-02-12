@@ -1,11 +1,18 @@
 package com.liqaa.client.controllers.FXMLcontrollers;
 import com.liqaa.client.Main;
+import com.liqaa.client.controllers.services.implementations.DataCenter;
+import com.liqaa.client.network.ClientImpl;
+import com.liqaa.client.network.ServerConnection;
 import com.liqaa.client.util.SceneManager;
+import com.liqaa.shared.models.entities.User;
+import com.liqaa.shared.network.Server;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+
+import java.rmi.RemoteException;
 
 
 public class SignInController {
@@ -25,8 +32,6 @@ public class SignInController {
     @FXML
     private TextField PhoneField;
 
-    private String p="01143451668";
-    private String pas="1234567sa";
     public void initialize() {
 
         System.out.println("sign in controller");
@@ -36,23 +41,30 @@ public class SignInController {
 
     @FXML
     void handleLogInButton(ActionEvent event) {
-       // User login(String phone , String password); >> return null or user info
-        if (!PhoneField.getText().equals(p) || !PasswordField.getText().equals(pas))
-        {
-            // Your code here for when the phone or password do not match
+        try {
+            String phone = PhoneField.getText();
+            String password = PasswordField.getText();
 
-            Alert a = new Alert(Alert.AlertType.NONE);
-            a.setAlertType(Alert.AlertType.ERROR);
-            a.setContentText("Invalid Phone Number or Password.");
-            a.show(); // Add this line to display the alert
-            PasswordField.clear();
-            PhoneField.clear();
+            User user = ServerConnection.getServer().signIn(ClientImpl.getClient(), phone, password);
+            if (user == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Invalid Phone Number or Password.");
+                alert.show();
+                PasswordField.clear();
+                PhoneField.clear();
+            } else
+            {
+                DataCenter.getInstance().setCurrentUser(user);
+                SceneManager.getInstance().showPrimaryScene();
+            }
+        } catch (RemoteException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("An error occurred while attempting to sign in. Please try again.");
+            alert.show();
+            e.printStackTrace();
         }
-        else  if (PhoneField.getText().equals(p) && PasswordField.getText().equals(pas))
-            System.out.println("LogInButton");
-        //nevigate to home
-
     }
+
 
     @FXML
     void handleSignUpButton(ActionEvent event) {

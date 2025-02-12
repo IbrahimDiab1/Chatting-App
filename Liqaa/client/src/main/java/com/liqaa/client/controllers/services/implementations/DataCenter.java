@@ -21,7 +21,7 @@ public class DataCenter
     private String curTab; // in the notification list>> it may be all, announcements, accepted, declined, request
 
     private Category currentCategory ;
-    private User currentUser = new User(2,"Ibrahim","ibrahim@gmail.com","password",null);// for testing
+    private User currentUser; //= new User(1,"Ibrahim","ibrahim@gmail.com","password",null);// for testing
     private ChatInfo currentChat;
     private int currentConversationId;
     private SceneManager.SceneType currentScene;

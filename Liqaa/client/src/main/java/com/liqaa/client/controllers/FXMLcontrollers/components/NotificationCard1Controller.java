@@ -52,8 +52,12 @@ public class NotificationCard1Controller implements Initializable {
         }
         else {
             byte[] userPhoto = sender.getProfilepicture();
-            InputStream inputStream = new ByteArrayInputStream(userPhoto);
-            image = new Image(inputStream);
+            if (userPhoto == null) {
+                image = new Image(getClass().getResourceAsStream("/com/liqaa/client/view/images/defaultProfileImage.png"));
+            } else {
+                InputStream inputStream = new ByteArrayInputStream(userPhoto);
+                image = new Image(inputStream);
+            }
         }
         senderPhoto.setFill(new ImagePattern(image));
         senderPhoto.setStroke(null);

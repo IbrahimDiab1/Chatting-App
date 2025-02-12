@@ -3,21 +3,38 @@ package com.liqaa.server.controllers.reposotories.implementations;
 import com.liqaa.server.controllers.reposotories.interfaces.MessageDAO;
 import com.liqaa.server.util.DatabaseManager;
 import com.liqaa.shared.models.entities.Message;
+import com.liqaa.server.util.DatabaseManager;
 import com.liqaa.shared.models.enums.MessageType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MessageDAOImpl implements MessageDAO {
+    private static final Logger logger = LoggerFactory.getLogger(MessageDAOImpl.class);
+    private Connection connection;
+
+
+    public MessageDAOImpl() {
+        try {
+            this.connection = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            logger.error("Error getting database connection: ", e);
+            throw new RuntimeException("Failed to get database connection", e);
+        }
+    }
 
     private MessageType getMessageTypeFromString(String value) {
         try {
             return MessageType.valueOf(value.toUpperCase());
         } catch (IllegalArgumentException e) {
-            System.err.println("Invalid MessageType value: " + value);
+            logger.warn("Invalid MessageType value: " + value);
             return MessageType.TEXT; // Default to TEXT if invalid
         }
     }
@@ -190,5 +207,27 @@ public class MessageDAOImpl implements MessageDAO {
         } catch (SQLException e) {
             System.err.println("Error deleting message: " + e.getMessage());
         }
+    }
+    @Override
+    public Map<String, Integer> getMessagesPerDay()
+    {
+        Map<String, Integer> messagesPerDay = new HashMap<>();
+        String query = "SELECT DAYNAME(sent_at) AS day, COUNT(*) AS message_count, DAYOFWEEK(sent_at) AS day_num " +
+                "FROM messages " +
+                "GROUP BY day, day_num " +
+                "ORDER BY FIELD(day, 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday')";
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                String day = resultSet.getString("day");
+                int count = resultSet.getInt("message_count");
+                messagesPerDay.put(day, count);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return messagesPerDay;
     }
 }

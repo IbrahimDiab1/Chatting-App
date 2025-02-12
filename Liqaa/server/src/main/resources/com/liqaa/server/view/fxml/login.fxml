@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400" prefWidth="800" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.liqaa.server.controllers.FXMLcontrollers.LoginController">
+<AnchorPane prefHeight="400" prefWidth="800" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.liqaa.server.controllers.FXMLcontrollers.LoginController">
     <SplitPane cache="true" dividerPositions="0.5" focusTraversable="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
 
@@ -49,8 +49,8 @@
                   </VBox.margin></HBox>
                <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="300.0" style="-fx-background-color: white; -fx-background-radius: 15px;">
                   <children>
-                     <PasswordField focusTraversable="false" prefHeight="32.0" prefWidth="602.0" promptText="  Password" style="-fx-background-radius: 20 0 0 20;" />
-                     <ImageView fx:id="passwordIcon" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#handlePasswordVisability" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <PasswordField fx:id="passwordTextField" focusTraversable="false" prefHeight="32.0" prefWidth="602.0" promptText="  Password" style="-fx-background-radius: 20 0 0 20; -fx-background-color: Transparent;" />
+                     <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                         <image>
                            <Image url="@../images/password1.png" />
                         </image>
@@ -61,7 +61,7 @@
                   </VBox.margin>
                </HBox>
 
-                    <Button fx:id="AdminLogInButton" maxHeight="50.0" onAction="#handleAdminLogInButton" onMouseClicked="#handleAdminLogInButton" opacity="0.91" prefWidth="84.0" style="-fx-background-color: #329ba2; -fx-text-fill: white; -fx-font-size: 15px; -fx-padding: 5 5; -fx-font-style: bold; -fx-cursor: hand;" styleClass="redius" text="LogIn">
+                    <Button fx:id="AdminLogInButton" maxHeight="50.0" onAction="#handleAdminLogInButton" onMouseClicked="#handleAdminLogInButton" opacity="0.91" prefWidth="84.0" style="-fx-background-color: #329ba2; -fx-text-fill: white; -fx-font-size: 15px; -fx-padding: 5 5; -fx-font-style: bold; -fx-cursor: hand; -fx-background-radius: 50px;" text="LogIn">
                   <opaqueInsets>
                      <Insets />
                   </opaqueInsets>

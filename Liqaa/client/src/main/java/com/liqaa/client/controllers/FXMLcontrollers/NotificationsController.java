@@ -160,7 +160,6 @@ public class NotificationsController implements Initializable {
         curTab = "all";
         notificationList = FXCollections.observableArrayList();
         notificationList.addListener((ListChangeListener<Notification>) change -> {
-            System.out.println(curTab);
             if(curTab.equals("all")){
                 updateUI();
             }
@@ -279,7 +278,7 @@ public class NotificationsController implements Initializable {
     // Loads:
     public void loadAllNotifications() {
         try {
-            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAllNotifications(7); // replace it with the current user id
+            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAllNotifications(1); // replace it with the current user id
             Platform.runLater(() -> {
                 notificationList.clear();
                 notificationList.addAll(newNotifications);

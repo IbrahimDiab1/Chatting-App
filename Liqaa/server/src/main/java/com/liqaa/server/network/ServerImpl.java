@@ -23,8 +23,9 @@ import com.liqaa.shared.network.Client;
 
 public class ServerImpl extends UnicastRemoteObject implements Server
 {
-    private final Map<Integer, Client> onlineClients = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<Integer, Client> onlineClients = new ConcurrentHashMap<>();
     private static ServerImpl server;
+    private final UserServicesInt userServices = UserServicesImpl.getInstance();
 
     private ServerImpl() throws RemoteException
     {
@@ -33,8 +34,17 @@ public class ServerImpl extends UnicastRemoteObject implements Server
 
 
     @Override
-    public synchronized void registerClient(Client client, int userId) throws RemoteException {
-        onlineClients.put(userId, client);
+    public synchronized User signIn(Client client, String phone, String password) throws RemoteException
+    {
+        User user= userServices.signIn(phone, password);
+        System.out.println("User in sign in: "+user);
+        if(user!=null) {
+            System.out.println("test");
+            onlineClients.put(user.getId(), client);
+
+            return user;
+        }
+        return null;
     }
 
     @Override
@@ -42,16 +52,13 @@ public class ServerImpl extends UnicastRemoteObject implements Server
         onlineClients.remove(userId);
     }
 
-    private void notifyClientsAboutMessage(Message message, List<Integer> recipients) {
-        recipients.forEach(userId -> {
-            Client client = onlineClients.get(userId);
-            if (client != null) {
-                try {
-                    client.receiveMessage(message);
-                } catch (RemoteException e) {
-                    System.out.println("Client " + userId + " disconnected");
-                    onlineClients.remove(userId);
-                }
+    private void notifyClientsAboutMessage(Message message) {
+        onlineClients.forEach((userId, client) -> {
+            try {
+                client.receiveMessage(message);
+            } catch (RemoteException e) {
+                System.out.println("Client " + userId + " disconnected");
+                onlineClients.remove(userId);
             }
         });
     }
@@ -73,12 +80,6 @@ public class ServerImpl extends UnicastRemoteObject implements Server
         }
     }
 
-    private final UserServicesInt userServices = UserServicesImpl.getInstance();
-
-    @Override
-    public User signIn(String userPhone, String userPassword) throws RemoteException {
-        return userServices.signIn(userPhone, userPassword);
-    }
 
     @Override
     public boolean logout(String userPhone) throws RemoteException {
@@ -216,8 +217,17 @@ public class ServerImpl extends UnicastRemoteObject implements Server
 
     @Override
     public int sendMessage(Message message) throws  RemoteException {
-       int id= MessageServiceImpl.getInstance().sendMessage(message);
-
+        int id = MessageServiceImpl.getInstance().sendMessage(message);
+        onlineClients.forEach((userId, client) -> {
+            if(userId != message.getSenderId()) {
+                try {
+                    client.receiveMessage(message);
+                } catch (RemoteException e) {
+                    System.out.println("Client " + userId + " disconnected");
+                    onlineClients.remove(userId);
+                }
+            }
+        });
         return id;
     }
 

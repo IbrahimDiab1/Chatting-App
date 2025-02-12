@@ -1,6 +1,8 @@
 package com.liqaa.client.controllers.FXMLcontrollers;
 
+import com.liqaa.client.network.ServerConnection;
 import com.liqaa.client.util.SceneManager;
+import com.liqaa.shared.models.entities.Group;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -24,9 +26,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
+import com.liqaa.client.controllers.services.implementations.ContactServiceImpl;
+import com.liqaa.shared.models.entities.Category;
+import com.liqaa.shared.models.entities.User;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.rmi.RemoteException;
 import java.util.*;
 import java.util.stream.Collectors;
 import javafx.scene.image.Image;
@@ -52,7 +62,11 @@ public class ContactsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupListView();
-        populateContacts();
+        try {
+            populateContacts();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
 
         // ربط القائمة المفلترة بالـ ListView
         contactsList.setItems(filteredContactsList);
@@ -142,7 +156,12 @@ public class ContactsController implements Initializable {
         Text bioText = new Text(item.getBio());
         bioText.setWrappingWidth(150); // تحديد عرض ثابت للـ Bio
 
-        Text statusText = new Text(item.getStatus());
+        String status = "";
+        if(item.getStatus().equals("AVAILABLE")) status = "Available";
+        if(item.getStatus().equals("BUSY")) status = "Busy";
+        if(item.getStatus().equals("AWAY")) status = "Away";
+        if(item.getStatus().equals("OFFLINE")) status = "Offline";
+        Text statusText = new Text(status);
         statusText.setWrappingWidth(80); // تحديد عرض ثابت للحالة
 
         Text categoryText = new Text(item.getCategory());
@@ -169,14 +188,20 @@ public class ContactsController implements Initializable {
         return hBox;
     }
 
-    private void populateContacts() {
-        originalContactsList.addAll(
-                new Contact(new Image(getClass().getResource("/com/liqaa/client/view/images/user1.png").toString()), "Lindsey Stroud", "+201000333511", "Muslim", "Available", "Friend", new Image(getClass().getResource("/com/liqaa/client/view/images/block.png").toString()), new Image(getClass().getResource("/com/liqaa/client/view/images/edit.png").toString()), new Image(getClass().getResource("/com/liqaa/client/view/images/delete.png").toString())),
-                new Contact(new Image(getClass().getResource("/com/liqaa/client/view/images/user2.png").toString()), "Sarah brown", "+201033325420", "Feel free", "Busy", "Family", new Image(getClass().getResource("/com/liqaa/client/view/images/block.png").toString()), new Image(getClass().getResource("/com/liqaa/client/view/images/edit.png").toString()), new Image(getClass().getResource("/com/liqaa/client/view/images/delete.png").toString())),
-                new Contact(new Image(getClass().getResource("/com/liqaa/client/view/images/user3.png").toString()), "Micheal Owen", "+201088865308", "Fueled by coffee & code", "Away", "Friend, Work", new Image(getClass().getResource("/com/liqaa/client/view/images/block.png").toString()), new Image(getClass().getResource("/com/liqaa/client/view/images/edit.png").toString()), new Image(getClass().getResource("/com/liqaa/client/view/images/delete.png").toString())),
-                new Contact(new Image(getClass().getResource("/com/liqaa/client/view/images/user4.png").toString()), "Mary Jane", "+201077554274", "Just an ITIan :)", "Available", "Work", new Image(getClass().getResource("/com/liqaa/client/view/images/block.png").toString()), new Image(getClass().getResource("/com/liqaa/client/view/images/edit.png").toString()), new Image(getClass().getResource("/com/liqaa/client/view/images/delete.png").toString())),
-                new Contact(new Image(getClass().getResource("/com/liqaa/client/view/images/user5.png").toString()), "Peter dodle", "+201045632103", "Sleeping...", "Away", "Work", new Image(getClass().getResource("/com/liqaa/client/view/images/block.png").toString()), new Image(getClass().getResource("/com/liqaa/client/view/images/edit.png").toString()), new Image(getClass().getResource("/com/liqaa/client/view/images/delete.png").toString()))
-        );
+    private void populateContacts() throws RemoteException {
+        List<User> contacts = ContactServiceImpl.getInstance().getUserFriends(7);
+        for(User user : contacts){
+            byte[] imageData = user.getProfilepicture();
+            Image profileImage;
+            if (imageData == null) {
+                profileImage = new Image(getClass().getResourceAsStream("/com/liqaa/client/view/images/defaultProfileImage.png"));
+            } else {
+                profileImage = new Image(new ByteArrayInputStream(imageData));
+            }
+            List<Category> userCategories = ContactServiceImpl.getInstance().getUserCategories(user.getId());
+            String categoriesStr = converCategoriesToString(userCategories);
+            originalContactsList.add(new Contact(profileImage, user.getDisplayName(), user.getPhoneNumber(), user.getBio(), user.getCurrentstatus().toString(), categoriesStr, new Image(getClass().getResource("/com/liqaa/client/view/images/block.png").toString()), new Image(getClass().getResource("/com/liqaa/client/view/images/edit.png").toString()), new Image(getClass().getResource("/com/liqaa/client/view/images/delete.png").toString())));
+        }
     }
 
     // Event handlers for the buttons
@@ -212,7 +237,18 @@ public class ContactsController implements Initializable {
 
     @FXML
     private void logout_action(MouseEvent event) {
-       //todo logout
+        System.out.println("Logout button clicked!");
+    }
+
+    private String converCategoriesToString(List<Category> userCategories){
+        StringBuilder categories = new StringBuilder();
+        for(int i=0; i<(int)userCategories.size(); i++){
+            categories.append(userCategories.get(i).getCategoryName());
+            if(i != (int)userCategories.size() - 1){
+                categories.append(", ");
+            }
+        }
+        return categories.toString();
     }
 
     @FXML
@@ -252,12 +288,25 @@ public class ContactsController implements Initializable {
             // Convert the result to a Contact object
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == addButton) {
+                    User addedContact;
+                    try {
+                        addedContact = ServerConnection.getServer().getUserInfo(phoneField.getText());
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                    byte[] imageData = addedContact.getProfilepicture(); // الحصول على الصورة كـ byte[]
+                    Image profileImage = new Image(new ByteArrayInputStream(imageData));
+                    try {
+                        ServerConnection.getServer().addContact(7, addedContact.getId());
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
                     return new Contact(
-                            new Image(getClass().getResource("/com/liqaa/client/view/images/user1.png").toString()),
-                            "New Contact", // Default name
-                            phoneField.getText(), // Phone number
-                            "", // Bio
-                            "Available", // Status
+                            profileImage,
+                            addedContact.getDisplayName(),
+                            addedContact.getPhoneNumber(),
+                            addedContact.getBio(),
+                            addedContact.getCurrentstatus().toString(),
                             "", // Category
                             new Image(getClass().getResource("/com/liqaa/client/view/images/block.png").toString()),
                             new Image(getClass().getResource("/com/liqaa/client/view/images/edit.png").toString()),
@@ -490,7 +539,13 @@ public class ContactsController implements Initializable {
 
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(categoryName -> {
-                System.out.println("New Category: " + categoryName);
+                List<Category> newCategory = new ArrayList<>();
+                newCategory.add(new Category(7, categoryName));
+                try {
+                    ContactServiceImpl.getInstance().addCategories(newCategory);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -498,12 +553,16 @@ public class ContactsController implements Initializable {
         }
     }
 
+
     @FXML
     private void removeCategoryAction() {
         try {
             ComboBox<String> categoryComboBox = new ComboBox<>();
             categoryComboBox.setPromptText("Select a category to remove");
-            categoryComboBox.getItems().addAll("Category1", "Category2", "Category3");
+            List<Category> userCategories = ContactServiceImpl.getInstance().getCategories(7);
+            for (Category category : userCategories) {
+                categoryComboBox.getItems().add(category.getCategoryName());
+            }
 
             Dialog<ButtonType> dialog = new Dialog<>();
             dialog.setTitle("Remove Category");

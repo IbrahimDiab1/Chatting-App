@@ -16,6 +16,7 @@ import com.liqaa.shared.util.AlertNotifier;
 import com.liqaa.shared.util.NotificationPopup;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -50,6 +51,8 @@ import com.liqaa.shared.models.enums.CurrentStatus;
 
 public class PrimaryController
 {
+
+
     @FXML
     private TextField messageField;
     @FXML
@@ -240,6 +243,14 @@ public class PrimaryController
             chatBox.setItems(DataCenter.getInstance().getMessages());
 
             DataCenter.getInstance().initializeListeners();
+            chatBox.getItems().addListener((ListChangeListener<Message>) change -> {
+                while (change.next()) {
+                    if (change.wasAdded()) {
+                        scrollDown();
+                    }
+                }
+            });
+            scrollDown();
         }
 
 
@@ -305,8 +316,16 @@ public class PrimaryController
         });
     }
 
-
-
+    public void scrollDown()
+    {
+        Platform.runLater(() ->
+        {
+            if (!DataCenter.getInstance().getMessages().isEmpty()) {
+                chatBox.scrollTo(DataCenter.getInstance().getMessages().size() -1);
+            }
+        });
+    }
+    
     @FXML
     private void handleSendMessage()
     {
@@ -321,7 +340,7 @@ public class PrimaryController
 
                 Platform.runLater(() ->
                 {
-                    chatBox.scrollTo(DataCenter.getInstance().getMessages().size() );
+//                    chatBox.scrollTo(DataCenter.getInstance().getMessages().size() );
 
                     if (!DataCenter.getInstance().getMessages().isEmpty())
                         chatBox.scrollTo(DataCenter.getInstance().getMessages().size()-1 );

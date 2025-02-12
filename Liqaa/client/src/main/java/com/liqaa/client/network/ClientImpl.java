@@ -1,6 +1,7 @@
 package com.liqaa.client.network;
 
 
+import com.liqaa.client.controllers.FXMLcontrollers.PrimaryController;
 import com.liqaa.client.controllers.services.implementations.DataCenter;
 import com.liqaa.shared.models.Contact;
 import com.liqaa.shared.models.ChatInfo;
@@ -16,6 +17,17 @@ import java.util.Optional;
 
 public class ClientImpl extends UnicastRemoteObject implements Client
 {
+    static private Client client;
+
+    public static Client getClient() {
+        try {
+            if (client == null)
+                client = new ClientImpl();
+            return client;
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     protected ClientImpl() throws RemoteException
     {
@@ -28,6 +40,7 @@ public class ClientImpl extends UnicastRemoteObject implements Client
             // Update messages list if viewing the conversation
             if (DataCenter.getInstance().getCurrentConversationId() == message.getConversationId()) {
                 DataCenter.getInstance().getMessages().add(message);
+//                PrimaryController.getInstance().scrollDown();
             }
 
             // Update chat list preview

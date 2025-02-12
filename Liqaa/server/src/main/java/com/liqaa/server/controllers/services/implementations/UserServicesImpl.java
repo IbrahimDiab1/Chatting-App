@@ -36,7 +36,7 @@ public class UserServicesImpl implements UserServicesInt {
                 return null;
             }
               //do not retrun user's password
-              user.setPasswordHash(null);
+             //user.setPasswordHash("0");
               return user ;
         }
     @Override

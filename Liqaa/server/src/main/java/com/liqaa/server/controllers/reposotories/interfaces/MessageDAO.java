@@ -2,6 +2,7 @@ package com.liqaa.server.controllers.reposotories.interfaces;
 
 import com.liqaa.shared.models.entities.Message;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface MessageDAO {
@@ -12,4 +13,5 @@ public interface MessageDAO {
     List<Message> findByConversationId(int conversationId); // New method without pagination
     void update(Message message);
     void delete(int id);
+    public Map<String, Integer> getMessagesPerDay();
 }
