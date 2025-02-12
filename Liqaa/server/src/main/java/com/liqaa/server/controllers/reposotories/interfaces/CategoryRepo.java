@@ -14,5 +14,6 @@ public interface CategoryRepo
     List<Category> getUserCategories(int id);
     List<Category> getAllCategories(int [] ids);
     public List<Category> getCategoriesForContact(int userId, int contactId);
+    void removeCategory(String categoryName, int userId);
 }
 

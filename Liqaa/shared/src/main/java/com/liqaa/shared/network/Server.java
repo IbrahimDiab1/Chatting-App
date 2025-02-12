@@ -105,7 +105,7 @@ public interface Server extends Remote
     public boolean deleteContact (int userId , int contactId) throws RemoteException;
     public  boolean blockContact (int userId , int contactId) throws RemoteException;
     public  boolean unblockContact (int userId , int contactId) throws RemoteException;
-
+    public boolean isBlocked(int userId, int contactId) throws RemoteException;
 
 
 
@@ -120,7 +120,7 @@ public interface Server extends Remote
     void removeCategory(int categoryId, int userId) throws RemoteException;
     List<Category> getCategoriesForContact(int userId, int contactId) throws RemoteException;
     Map<Category, List<Integer>> getCategoriesWithContacts(int userId) throws RemoteException;
-
+    void removeCategory(String categoryName, int userId) throws RemoteException;
     String ping() throws RemoteException;
 
 

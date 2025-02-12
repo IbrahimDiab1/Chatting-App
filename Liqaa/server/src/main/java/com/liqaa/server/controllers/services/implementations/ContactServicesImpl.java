@@ -4,12 +4,10 @@ import com.liqaa.server.controllers.services.interfaces.ContactServicesInt;
 import com.liqaa.shared.models.entities.Contacts;
 import com.liqaa.shared.models.entities.FriendRequests;
 import com.liqaa.shared.models.entities.User;
-import com.liqaa.server.controllers.reposotories.implementations.UserImplementation;
 import com.liqaa.server.controllers.reposotories.implementations.ContactImplementation;
 import com.liqaa.server.controllers.reposotories.implementations.FriendRequestImplementation;
 import com.liqaa.shared.models.enums.FriendRequestStatus;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class ContactServicesImpl implements ContactServicesInt {
@@ -93,5 +91,10 @@ public class ContactServicesImpl implements ContactServicesInt {
     public  boolean unblockContact (int userId , int contactId)
     {
         return  ContactImplementation.getContactImplObject().unblockContact(userId,contactId);
+    }
+
+    @Override
+    public boolean isBlocked(int userId, int contactId) {
+        return ContactImplementation.getContactImplObject().isContact(userId, contactId);
     }
 }

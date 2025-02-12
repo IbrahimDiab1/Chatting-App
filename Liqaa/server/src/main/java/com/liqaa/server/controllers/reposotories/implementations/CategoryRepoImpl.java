@@ -210,6 +210,30 @@ public class CategoryRepoImpl implements CategoryRepo
     }
 
     @Override
+    public void removeCategory(String categoryName, int userId)
+    {
+        if(categoryName == null || categoryName.isEmpty() || userId <= 0)
+        {
+            System.err.println("Error removing category: Invalid category name or user ID");
+            return;
+        }
+        String query = "DELETE FROM categories WHERE user_id = ? AND category_name = ?;";
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query))
+        {
+            statement.setInt(1, userId);
+            statement.setString(2, categoryName);
+            if(statement.executeUpdate() == 0)
+            {
+                System.err.println("Error removing category: No rows affected");
+                return;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error removing category, Failed to create statement: " + e.getMessage());
+        }
+    }
+
+    @Override
     public List<Category> getAllCategories(int[] ids)
     {
         if(ids == null || ids.length == 0)

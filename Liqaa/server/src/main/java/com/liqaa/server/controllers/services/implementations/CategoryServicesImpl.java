@@ -147,6 +147,17 @@ public class CategoryServicesImpl implements CategoryServices
     }
 
     @Override
+    public void removeCategory(String categoryName, int userId)
+    {
+        if (categoryName == null || categoryName.isEmpty() || userId <= 0)
+        {
+            System.err.println("Invalid category name or user ID");
+            return;
+        }
+        CategoryRepoImpl.getInstance().removeCategory(categoryName, userId);
+    }
+
+    @Override
     public List<Category> getCategoriesForContact(int userId, int contactId)
     {
         if (userId <= 0 || contactId <= 0)

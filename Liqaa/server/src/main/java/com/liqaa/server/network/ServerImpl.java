@@ -429,6 +429,11 @@ public class ServerImpl extends UnicastRemoteObject implements Server
     }
 
     @Override
+    public boolean isBlocked(int userId, int contactId) throws RemoteException {
+        return ContactServicesImpl.getInstance().isBlocked(userId,contactId);
+    }
+
+    @Override
     public List<Category> getCategories(int userId) throws RemoteException {
         return CategoryServicesImpl.getInstance().getCategories(userId);
     }
@@ -471,6 +476,12 @@ public class ServerImpl extends UnicastRemoteObject implements Server
     @Override
     public Map<Category, List<Integer>> getCategoriesWithContacts(int userId) throws RemoteException {
         return CategoryServicesImpl.getInstance().getCategoriesWithContacts(userId);
+    }
+
+    @Override
+    public void removeCategory(String categoryName, int userId) throws RemoteException
+    {
+        CategoryServicesImpl.getInstance().removeCategory(categoryName, userId);
     }
 
     @Override

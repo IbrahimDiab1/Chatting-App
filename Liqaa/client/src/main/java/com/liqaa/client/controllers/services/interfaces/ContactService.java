@@ -25,4 +25,6 @@ public interface ContactService {
     List<Category> getCategories(int userId) throws RemoteException;
     boolean blockContact (int userId , int contactId) throws RemoteException;
     boolean unblockContact (int userId , int contactId) throws RemoteException;
+
+    boolean isBlocked(int userId, int contactId) throws RemoteException;
 }

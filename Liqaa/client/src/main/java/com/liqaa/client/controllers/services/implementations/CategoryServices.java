@@ -23,6 +23,7 @@ public class CategoryServices
         }
     }
 
+
     public static CategoryServices getInstance() throws RemoteException
     {
         if (instance == null) {
@@ -102,4 +103,12 @@ public class CategoryServices
         }
     }
 
+    public void removeCategory(String categoryName, int userId) {
+        try {
+            ServerConnection.getServer().removeCategory(categoryName, userId);
+        } catch (RemoteException e) {
+            System.err.println("Error removing category: " + e.getMessage());
+        }
+
+    }
 }

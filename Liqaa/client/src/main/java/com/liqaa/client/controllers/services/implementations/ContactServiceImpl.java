@@ -123,4 +123,9 @@ public class ContactServiceImpl implements ContactService {
     public boolean unblockContact (int userId , int contactId) throws RemoteException{
         return ServerConnection.getServer().unblockContact(userId, contactId);
     }
+
+    @Override
+    public boolean isBlocked(int userId, int contactId) throws RemoteException{
+        return ServerConnection.getServer().isBlocked(userId, contactId);
+    }
 }

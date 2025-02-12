@@ -22,6 +22,25 @@ public class ContactImplementation implements ContactInterface {
         }
         return  ContactImplObject;
     }
+
+    public boolean isBlocked(int userId, int contactId) {
+        boolean isBlocked = false;
+        String query = "SELECT is_blocked FROM contacts WHERE user_id = ? AND contact_id = ?";
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            statement.setInt(2, contactId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                isBlocked = resultSet.getBoolean("is_blocked");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error checking if contact is blocked: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return isBlocked;
+    }
+
     @Override
     public boolean isContact(int userId, int contactId)
     {

@@ -12,13 +12,13 @@ public class DataCenter
 {
     private static DataCenter instance = null;
 
-    private ObservableList<Category> categories = FXCollections.observableArrayList(); // it doesn't need call back
-    private ObservableList<ChatInfo> chatList = FXCollections.observableArrayList(); // it needs to be updated real time if it was active and when the contact accepts the request and when receiving messages in direct or group conversations and when be added to a group, and when the friend change his status but here make sure that he doesn't appear offline as he may be online but with status offline.
-    private ObservableList<Message> messages = FXCollections.observableArrayList(); // it needs to be updated if it was active and when receiving messages related to this conversation
-    private ObservableList<Contact> originalContactsList = FXCollections.observableArrayList(); // it needs to be updated when the contact accepts the request
+    private ObservableList<Category> categories = FXCollections.observableArrayList();
+    private ObservableList<ChatInfo> chatList = FXCollections.observableArrayList();
+    private ObservableList<Message> messages = FXCollections.observableArrayList();
+    private ObservableList<Contact> originalContactsList = FXCollections.observableArrayList();
 
     private ObservableList<Notification> notificationList;
-    private String curTab; // in the notification list>> it may be all, announcements, accepted, declined, request
+    private String curTab;
 
     private Category currentCategory ;
     private User currentUser; //= new User(1,"Ibrahim","ibrahim@gmail.com","password",null);// for testing
