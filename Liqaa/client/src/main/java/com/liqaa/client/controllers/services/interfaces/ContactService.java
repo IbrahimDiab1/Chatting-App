@@ -1,11 +1,10 @@
 package com.liqaa.client.controllers.services.interfaces;
 
-import com.liqaa.shared.models.entities.Group;
-import com.liqaa.shared.models.entities.User;
-import com.liqaa.shared.models.entities.Category;
+import com.liqaa.shared.models.entities.*;
 import javafx.collections.ObservableList;
 
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,4 +21,6 @@ public interface ContactService {
     boolean unblockContact (int userId , int contactId) throws RemoteException;
     boolean isBlocked(int userId, int contactId) throws RemoteException;
     void removeCategory(String categoryName, int userId) throws RemoteException;
+    boolean sendFriendRequest( FriendRequests addRequests) throws RemoteException;
+    boolean createNotification(Notification notification) throws SQLException, RemoteException;
 }

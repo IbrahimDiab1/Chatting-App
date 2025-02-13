@@ -2,13 +2,12 @@ package com.liqaa.client.controllers.services.implementations;
 
 import com.liqaa.client.controllers.services.interfaces.ContactService;
 import com.liqaa.client.network.ServerConnection;
-import com.liqaa.shared.models.entities.Group;
-import com.liqaa.shared.models.entities.User;
-import com.liqaa.shared.models.entities.Category;
+import com.liqaa.shared.models.entities.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,5 +82,15 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public void removeCategory(String categoryName, int userId) throws RemoteException{
         ServerConnection.getServer().removeCategory(categoryName, userId);
+    }
+
+    @Override
+    public boolean sendFriendRequest( FriendRequests addRequests) throws RemoteException{
+        return ServerConnection.getServer().sendFriendRequest(addRequests);
+    }
+
+    @Override
+    public boolean createNotification(Notification notification) throws SQLException, RemoteException{
+        return ServerConnection.getServer().createNotification(notification);
     }
 }

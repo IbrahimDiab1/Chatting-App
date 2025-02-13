@@ -69,11 +69,21 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public ChatInfo createDirectConversation(int userId, User otherUserId) throws RemoteException{
-        return ServerConnection.getServer().createDirectConversation(7, otherUserId);
+        return ServerConnection.getServer().createDirectConversation(DataCenter.getInstance().getcurrentUserId(), otherUserId);
     }
 
     @Override
     public User getUserInfoById(int userId) throws RemoteException{
         return ServerConnection.getServer().getUserInfoById(userId);
+    }
+
+    @Override
+    public boolean addContact (int userId, int contactId) throws RemoteException{
+        return ServerConnection.getServer().addContact(userId, contactId);
+    }
+
+    @Override
+    public boolean createNotification(Notification notification) throws SQLException, RemoteException{
+        return ServerConnection.getServer().createNotification(notification);
     }
 }

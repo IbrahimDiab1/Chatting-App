@@ -1,8 +1,10 @@
 package com.liqaa.client.controllers.FXMLcontrollers;
 
+import com.liqaa.client.controllers.services.implementations.DataCenter;
 import com.liqaa.client.network.ServerConnection;
 import com.liqaa.client.util.SceneManager;
-import com.liqaa.shared.models.entities.Group;
+import com.liqaa.shared.models.entities.*;
+import com.liqaa.shared.models.enums.NotificationType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -27,8 +29,6 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import com.liqaa.client.controllers.services.implementations.ContactServiceImpl;
-import com.liqaa.shared.models.entities.Category;
-import com.liqaa.shared.models.entities.User;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -39,6 +39,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 import javafx.scene.control.Dialog;
@@ -207,7 +208,7 @@ public class ContactsController implements Initializable {
                     for(String category: categoriesNames){
                         try {
                             Boolean ok = false;
-                            for (Category cat: ContactServiceImpl.getInstance().getUserCategories(7)){
+                            for (Category cat: ContactServiceImpl.getInstance().getUserCategories(DataCenter.getInstance().getcurrentUserId())){
                                 if(cat.getCategoryName().equals(category)) ok = true;
                             }
                             if(ok){
@@ -234,14 +235,14 @@ public class ContactsController implements Initializable {
             int contactId = 0;
             try {
                 contactId = ServerConnection.getServer().getUserInfo(item.getPhoneNumber()).getId();
-                Boolean curStatus = ServerConnection.getServer().isBlocked(7, contactId);
+                Boolean curStatus = ServerConnection.getServer().isBlocked(DataCenter.getInstance().getcurrentUserId(), contactId);
                 if (curStatus){ // blocked
-                    ServerConnection.getServer().unblockContact(7, contactId);
+                    ServerConnection.getServer().unblockContact(DataCenter.getInstance().getcurrentUserId(), contactId);
                     Image blockImg = new Image(getClass().getResource("/com/liqaa/client/view/images/block.png").toString());
                     item.setBlock(blockImg);
                 }
                 else{
-                    ServerConnection.getServer().blockContact(7, contactId);
+                    ServerConnection.getServer().blockContact(DataCenter.getInstance().getcurrentUserId(), contactId);
                     Image unblockImg = new Image(getClass().getResource("/com/liqaa/client/view/images/unblock.png").toString());
                     item.setBlock(unblockImg);
                 }
@@ -254,7 +255,7 @@ public class ContactsController implements Initializable {
             System.out.println("delete");
             try {
                 int contactId = ServerConnection.getServer().getUserInfo(item.getPhoneNumber()).getId();
-                ServerConnection.getServer().deleteContact(7, contactId);
+                ServerConnection.getServer().deleteContact(DataCenter.getInstance().getcurrentUserId(), contactId);
                 originalContactsList.remove(item);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
@@ -265,7 +266,7 @@ public class ContactsController implements Initializable {
     }
 
     private void populateContacts() throws RemoteException {
-        List<User> contacts = ContactServiceImpl.getInstance().getUserFriends(7);
+        List<User> contacts = ContactServiceImpl.getInstance().getUserFriends(DataCenter.getInstance().getcurrentUserId());
         for(User user : contacts){
             byte[] imageData = user.getProfilepicture();
             Image profileImage;
@@ -276,7 +277,7 @@ public class ContactsController implements Initializable {
             }
             List<Category> userCategories = ContactServiceImpl.getInstance().getUserCategories(user.getId());
             String categoriesStr = convertCategoriesToString(userCategories);
-            Boolean curStatus = ServerConnection.getServer().isBlocked(7, user.getId());
+            Boolean curStatus = ServerConnection.getServer().isBlocked(DataCenter.getInstance().getcurrentUserId(), user.getId());
             Image img;
             if(curStatus){ // blocked
                 img = new Image(getClass().getResource("/com/liqaa/client/view/images/unblock.png").toString());
@@ -380,20 +381,23 @@ public class ContactsController implements Initializable {
                     }
                     byte[] imageData = addedContact.getProfilepicture();
                     Image profileImage = new Image(new ByteArrayInputStream(imageData));
-                    try {
-                        ServerConnection.getServer().addContact(7, addedContact.getId());
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
                     Image img;
                     try {
-                        if(ServerConnection.getServer().isBlocked(7, addedContact.getId())){ // blocked
+                        if(ServerConnection.getServer().isBlocked(DataCenter.getInstance().getcurrentUserId(), addedContact.getId())){ // blocked
                             img = new Image(getClass().getResource("/com/liqaa/client/view/images/unblock.png").toString());
                         }
                         else{
                             img = new Image(getClass().getResource("/com/liqaa/client/view/images/block.png").toString());
                         }
                     } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        ServerConnection.getServer().sendFriendRequest(new FriendRequests(DataCenter.getInstance().getcurrentUserId(), addedContact.getId()));
+                        ServerConnection.getServer().createNotification(new Notification(addedContact.getId(), DataCenter.getInstance().getcurrentUserId(), NotificationType.FRIEND_REQUEST, false));
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
                     return new Contact(
@@ -652,7 +656,7 @@ public class ContactsController implements Initializable {
                         throw new RuntimeException(e);
                     }
                     newGroup.setImage(groupPic);
-                    newGroup.setCreatedBy(7);
+                    newGroup.setCreatedBy(DataCenter.getInstance().getcurrentUserId());
                     try {
                         ServerConnection.getServer().createGroup(newGroup, groupMembersIds);
                     } catch (RemoteException e) {
@@ -692,7 +696,7 @@ public class ContactsController implements Initializable {
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(categoryName -> {
                 List<Category> newCategory = new ArrayList<>();
-                newCategory.add(new Category(7, categoryName));
+                newCategory.add(new Category(DataCenter.getInstance().getcurrentUserId(), categoryName));
                 try {
                     ContactServiceImpl.getInstance().addCategories(newCategory);
                 } catch (RemoteException e) {
@@ -711,7 +715,7 @@ public class ContactsController implements Initializable {
         try {
             ComboBox<String> categoryComboBox = new ComboBox<>();
             categoryComboBox.setPromptText("Select a category to remove");
-            List<Category> userCategories = ContactServiceImpl.getInstance().getCategories(7);
+            List<Category> userCategories = ContactServiceImpl.getInstance().getCategories(DataCenter.getInstance().getcurrentUserId());
             for (Category category : userCategories) {
                 categoryComboBox.getItems().add(category.getCategoryName());
             }
@@ -742,7 +746,7 @@ public class ContactsController implements Initializable {
                 if (selectedCategory != null && !selectedCategory.isEmpty()) {
                     System.out.println("Category to remove: " + selectedCategory);
                     //removeCategoryFromDummyData(selectedCategory);
-                    ServerConnection.getServer().removeCategory(selectedCategory, 7);
+                    ServerConnection.getServer().removeCategory(selectedCategory, DataCenter.getInstance().getcurrentUserId());
                 } else {
                     System.out.println("No category selected.");
                 }

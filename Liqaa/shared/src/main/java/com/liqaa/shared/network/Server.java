@@ -35,7 +35,7 @@ public interface Server extends Remote
 
 
 
-
+    boolean createNotification(Notification notification) throws SQLException, RemoteException;
     List<Notification> getUserNotifications(int userId) throws SQLException, RemoteException;
     List<Notification> getUpcomingRequests(int recipientId) throws SQLException, RemoteException;
     List<Notification> getAcceptedInvitations(int recipientId) throws SQLException, RemoteException;

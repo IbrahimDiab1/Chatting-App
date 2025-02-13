@@ -1,5 +1,6 @@
 package com.liqaa.client;
 
+import com.liqaa.client.controllers.services.interfaces.CurrentUser;
 import com.liqaa.client.network.ServerConnection;
 import com.liqaa.client.util.SceneManager;
 import com.liqaa.shared.network.Server;
@@ -42,6 +43,7 @@ public class Main extends Application
 
     public static void main(String[] args) throws SQLException, RemoteException
     {
+        System.out.println();
         launch();
     }
 }

@@ -22,4 +22,6 @@ public interface NotificationService {
     Boolean addToContactList(int userId, int newContactId) throws RemoteException;
     ChatInfo createDirectConversation(int userId, User otherUserId) throws RemoteException;
     User getUserInfoById(int userId) throws RemoteException;
+    boolean addContact (int userId, int contactId) throws RemoteException;
+    boolean createNotification(Notification notification) throws SQLException, RemoteException;
 }

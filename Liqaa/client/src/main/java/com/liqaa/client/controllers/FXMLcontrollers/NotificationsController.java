@@ -290,7 +290,7 @@ public class NotificationsController implements Initializable {
 
     public void loadAllAcceptedInvitations() {
         try {
-            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAllAcceptedInvitations(7); // replace 7 with the current user id
+            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAllAcceptedInvitations(DataCenter.getInstance().getcurrentUserId());
             Platform.runLater(() -> {
                 notificationList.clear();
                 notificationList.addAll(newNotifications);
@@ -302,7 +302,7 @@ public class NotificationsController implements Initializable {
 
     public void loadAllDeclinedInvitations() {
         try {
-            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAllDeclinedInvitations(7); // replace it with the current user id
+            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAllDeclinedInvitations(DataCenter.getInstance().getcurrentUserId()); // replace it with the current user id
             Platform.runLater(() -> {
                 notificationList.clear();
                 notificationList.addAll(newNotifications);
@@ -314,7 +314,7 @@ public class NotificationsController implements Initializable {
 
     public void loadUpcomingRequests() {
         try {
-            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAllFriendRequests(7); // replace it with the current user id
+            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAllFriendRequests(DataCenter.getInstance().getcurrentUserId());
             Platform.runLater(() -> {
                 notificationList.clear();
                 notificationList.addAll(newNotifications);
@@ -326,7 +326,7 @@ public class NotificationsController implements Initializable {
 
     public void loadAnnouncements() {
         try {
-            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAnnouncements(7); // replace it with the current user id
+            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAnnouncements(DataCenter.getInstance().getcurrentUserId());
             Platform.runLater(() -> {
                 notificationList.clear();
                 notificationList.addAll(newNotifications);
