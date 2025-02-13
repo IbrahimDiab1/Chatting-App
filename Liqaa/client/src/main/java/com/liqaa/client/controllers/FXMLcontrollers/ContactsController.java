@@ -33,14 +33,14 @@ import com.liqaa.shared.models.entities.User;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.stream.Collectors;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.Dialog;
 import com.liqaa.shared.models.Contact;
 
@@ -180,10 +180,86 @@ public class ContactsController implements Initializable {
         deleteIcon.setFitHeight(20);
         deleteIcon.setFitWidth(20);
 
-        // إضافة العناصر إلى الـ HBox
         hBox.getChildren().addAll(
-                photoWithStatus, nameText, phoneText, bioText, statusText, categoryText, blockIcon, editIcon, deleteIcon
+                photoWithStatus, nameText, phoneText, bioText, statusText, categoryText, editIcon, blockIcon, deleteIcon
         );
+
+        // 3 on right actions
+        editIcon.setOnMouseClicked(event -> {
+            System.out.println("edit");
+            try {
+                TextInputDialog dialog = new TextInputDialog();
+                dialog.setTitle("Edit Contact Category");
+                dialog.setHeaderText("Enter the categories names separated by comma:");
+                dialog.setContentText("Category:");
+                dialog.setGraphic(null);
+
+                setDialogLogo(dialog, 0.1, 0.3, 0.50, 0.0);
+                // Apply custom styles to the dialog
+                dialog.getDialogPane().getStylesheets().add(
+                        getClass().getResource("/com/liqaa/client/view/styles/contactStyle.css").toExternalForm()
+                );
+
+                Optional<String> result = dialog.showAndWait();
+                result.ifPresent(categoryName -> {
+                    StringBuilder fin = new StringBuilder();
+                    String[] categoriesNames = categoryName.split("\\s*,\\s*");
+                    for(String category: categoriesNames){
+                        try {
+                            Boolean ok = false;
+                            for (Category cat: ContactServiceImpl.getInstance().getUserCategories(7)){
+                                if(cat.getCategoryName().equals(category)) ok = true;
+                            }
+                            if(ok){
+                                fin.append(category + ", ");
+                            }
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    if (fin.length() > 1) {
+                        fin.deleteCharAt(fin.length() - 1);
+                        fin.deleteCharAt(fin.length() - 1);
+                    }
+                    item.setCategory(fin.toString());
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Error in addCategoryAction: " + e.getMessage());
+            }
+        });
+
+        blockIcon.setOnMouseClicked(event -> {
+            System.out.println("block");
+            int contactId = 0;
+            try {
+                contactId = ServerConnection.getServer().getUserInfo(item.getPhoneNumber()).getId();
+                Boolean curStatus = ServerConnection.getServer().isBlocked(7, contactId);
+                if (curStatus){ // blocked
+                    ServerConnection.getServer().unblockContact(7, contactId);
+                    Image blockImg = new Image(getClass().getResource("/com/liqaa/client/view/images/block.png").toString());
+                    item.setBlock(blockImg);
+                }
+                else{
+                    ServerConnection.getServer().blockContact(7, contactId);
+                    Image unblockImg = new Image(getClass().getResource("/com/liqaa/client/view/images/unblock.png").toString());
+                    item.setBlock(unblockImg);
+                }
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        deleteIcon.setOnMouseClicked(event -> {
+            System.out.println("delete");
+            try {
+                int contactId = ServerConnection.getServer().getUserInfo(item.getPhoneNumber()).getId();
+                ServerConnection.getServer().deleteContact(7, contactId);
+                originalContactsList.remove(item);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         return hBox;
     }
@@ -199,8 +275,16 @@ public class ContactsController implements Initializable {
                 profileImage = new Image(new ByteArrayInputStream(imageData));
             }
             List<Category> userCategories = ContactServiceImpl.getInstance().getUserCategories(user.getId());
-            String categoriesStr = converCategoriesToString(userCategories);
-            originalContactsList.add(new Contact(profileImage, user.getDisplayName(), user.getPhoneNumber(), user.getBio(), user.getCurrentstatus().toString(), categoriesStr, new Image(getClass().getResource("/com/liqaa/client/view/images/block.png").toString()), new Image(getClass().getResource("/com/liqaa/client/view/images/edit.png").toString()), new Image(getClass().getResource("/com/liqaa/client/view/images/delete.png").toString())));
+            String categoriesStr = convertCategoriesToString(userCategories);
+            Boolean curStatus = ServerConnection.getServer().isBlocked(7, user.getId());
+            Image img;
+            if(curStatus){ // blocked
+                img = new Image(getClass().getResource("/com/liqaa/client/view/images/unblock.png").toString());
+            }
+            else{
+                img = new Image(getClass().getResource("/com/liqaa/client/view/images/block.png").toString());
+            }
+            originalContactsList.add(new Contact(profileImage, user.getDisplayName(), user.getPhoneNumber(), user.getBio(), user.getCurrentstatus().toString(), categoriesStr, new Image(getClass().getResource("/com/liqaa/client/view/images/edit.png").toString()), img, new Image(getClass().getResource("/com/liqaa/client/view/images/delete.png").toString())));
         }
     }
 
@@ -240,7 +324,7 @@ public class ContactsController implements Initializable {
         System.out.println("Logout button clicked!");
     }
 
-    private String converCategoriesToString(List<Category> userCategories){
+    private String convertCategoriesToString(List<Category> userCategories){
         StringBuilder categories = new StringBuilder();
         for(int i=0; i<(int)userCategories.size(); i++){
             categories.append(userCategories.get(i).getCategoryName());
@@ -294,10 +378,21 @@ public class ContactsController implements Initializable {
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }
-                    byte[] imageData = addedContact.getProfilepicture(); // الحصول على الصورة كـ byte[]
+                    byte[] imageData = addedContact.getProfilepicture();
                     Image profileImage = new Image(new ByteArrayInputStream(imageData));
                     try {
                         ServerConnection.getServer().addContact(7, addedContact.getId());
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Image img;
+                    try {
+                        if(ServerConnection.getServer().isBlocked(7, addedContact.getId())){ // blocked
+                            img = new Image(getClass().getResource("/com/liqaa/client/view/images/unblock.png").toString());
+                        }
+                        else{
+                            img = new Image(getClass().getResource("/com/liqaa/client/view/images/block.png").toString());
+                        }
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }
@@ -308,8 +403,8 @@ public class ContactsController implements Initializable {
                             addedContact.getBio(),
                             addedContact.getCurrentstatus().toString(),
                             "", // Category
-                            new Image(getClass().getResource("/com/liqaa/client/view/images/block.png").toString()),
                             new Image(getClass().getResource("/com/liqaa/client/view/images/edit.png").toString()),
+                            img,
                             new Image(getClass().getResource("/com/liqaa/client/view/images/delete.png").toString())
                     );
                 }
@@ -330,6 +425,7 @@ public class ContactsController implements Initializable {
 
     @FXML
     private void addGroupAction() {
+        System.out.println("add group is clicked.........");
         try {
             // Create the dialog
             Dialog<Map<String, Object>> dialog = new Dialog<>();
@@ -357,20 +453,26 @@ public class ContactsController implements Initializable {
             HBox groupImageBox = new HBox(10);
             groupImageBox.setAlignment(Pos.CENTER_LEFT);
 
-            ImageView groupImageView = new ImageView(new Image(getClass().getResource("/com/liqaa/client/view/images/defaultGroupProfile.png").toString()));
+            Group newGroup = new Group();
+            Image defaultGroupImg = new Image(getClass().getResource("/com/liqaa/client/view/images/defaultGroupProfile.png").toString());
+            ImageView groupImageView = new ImageView(defaultGroupImg);
+            Path imagePath = Paths.get(getClass().getResource("/com/liqaa/client/view/images/defaultGroupProfile.png").toURI());
+            byte[] groupPicture = Files.readAllBytes(imagePath);
+
+            newGroup.setImage(groupPicture);
             groupImageView.setFitHeight(100);
             groupImageView.setFitWidth(100);
             groupImageView.setPreserveRatio(true);
             groupImageView.setCursor(Cursor.HAND);
 
-            // حواف دائرية للصورة
+
             Circle clip = new Circle(50, 50, 50); // Circle(centerX, centerY, radius)
             groupImageView.setClip(clip);
 
-            // إضافة ظل خفيف
+
             DropShadow dropShadow = new DropShadow();
-            dropShadow.setRadius(10); // حجم الظل
-            dropShadow.setOffsetX(0); // إزاحة أفقية
+            dropShadow.setRadius(10);
+            dropShadow.setOffsetX(0);
             dropShadow.setOffsetY(0); // إزاحة رأسية
             dropShadow.setColor(Color.color(0, 0, 0, 0.3)); // لون الظل (أسود مع شفافية)
             groupImageView.setEffect(dropShadow);
@@ -388,7 +490,15 @@ public class ContactsController implements Initializable {
                 );
                 File selectedFile = fileChooser.showOpenDialog(dialog.getDialogPane().getScene().getWindow());
                 if (selectedFile != null) {
-                    groupImageView.setImage(new Image(selectedFile.toURI().toString()));
+                    Image selectedImg = new Image(selectedFile.toURI().toString());
+                    groupImageView.setImage(selectedImg);
+                    byte[] newGroupPicture = null;
+                    try {
+                        newGroupPicture = Files.readAllBytes((Path) selectedImg);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    newGroup.setImage(newGroupPicture);
                 }
             };
 
@@ -495,26 +605,68 @@ public class ContactsController implements Initializable {
 
             dialog.getDialogPane().setContent(grid);
 
-            // Convert the result to a Map (Dummy Data)
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == createButton) {
                     Map<String, Object> groupData = new HashMap<>();
                     groupData.put("image", groupImageView.getImage());
                     groupData.put("name", nameField.getText());
                     groupData.put("description", descriptionField.getText());
-                    groupData.put("members", selectedContacts); // Add selected contacts
+                    groupData.put("members", new ArrayList<>(selectedContacts)); // Store selected contacts
+
+                    ArrayList<Integer> groupMembersIds = new ArrayList<>();
+                    for(int i=0; i<(int)selectedContacts.size(); i++){
+                        int userId = 0;
+                        try {
+                            userId = ServerConnection.getServer().getUserInfo(selectedContacts.get(i).getPhoneNumber()).getId();
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
+                        groupMembersIds.add(userId);
+                    }
+                    try {
+                        ServerConnection.getServer().createGroup(newGroup, groupMembersIds);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    newGroup.setName(nameField.getText());
+                    newGroup.setDescription(descriptionField.getText());
+                    byte[] groupPic = null;
+                    try {
+                        //groupPic = Files.readAllBytes((Path) groupImageView.getImage());
+                        try {
+                            if (groupImageView.getImage() != null) {
+                                String imageUrl = groupImageView.getImage().getUrl();
+                                if (imageUrl.startsWith("file:/")) { // Ensure it's a local file
+                                    Path imagePath2 = Paths.get(new URI(imageUrl));
+                                    groupPic = Files.readAllBytes(imagePath2);
+                                } else {
+                                    System.err.println("Image is not from a local file, skipping byte conversion.");
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    newGroup.setImage(groupPic);
+                    newGroup.setCreatedBy(7);
+                    try {
+                        ServerConnection.getServer().createGroup(newGroup, groupMembersIds);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
                     return groupData;
                 }
                 return null;
             });
 
-            Optional<Map<String, Object>> result = dialog.showAndWait();
+            Optional<Map<String, Object>> result = dialog.showAndWait().map(obj -> (Map<String, Object>) obj);
+
+
             result.ifPresent(groupData -> {
-                System.out.println("New Group: " + groupData.get("name") + " - " + groupData.get("description"));
-                System.out.println("Members: " + ((ObservableList<?>) groupData.get("members")).stream()
-                        .map(contact -> ((Contact) contact).getName())
-                        .collect(Collectors.joining(", ")));
-                // Save the group data or add it to a list
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -589,7 +741,8 @@ public class ContactsController implements Initializable {
                 String selectedCategory = categoryComboBox.getValue();
                 if (selectedCategory != null && !selectedCategory.isEmpty()) {
                     System.out.println("Category to remove: " + selectedCategory);
-                    removeCategoryFromDummyData(selectedCategory);
+                    //removeCategoryFromDummyData(selectedCategory);
+                    ServerConnection.getServer().removeCategory(selectedCategory, 7);
                 } else {
                     System.out.println("No category selected.");
                 }
@@ -598,13 +751,5 @@ public class ContactsController implements Initializable {
             e.printStackTrace();
             System.err.println("Error in removeCategoryAction: " + e.getMessage());
         }
-    }
-
-    // دالة لإزالة الفئة من البيانات الوهمية
-    private void removeCategoryFromDummyData(String categoryName) {
-        // هنا يمكنك إزالة الفئة من البيانات الوهمية
-        // مثال:
-        // dummyData.remove(categoryName);
-        System.out.println("Removed category: " + categoryName);
     }
 }

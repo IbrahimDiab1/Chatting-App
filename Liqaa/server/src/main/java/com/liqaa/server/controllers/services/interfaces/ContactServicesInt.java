@@ -17,4 +17,5 @@ public interface ContactServicesInt {
     public  boolean blockContact (int userId , int contactId);
     public  boolean unblockContact (int userId , int contactId);
 
+    boolean isBlocked(int userId, int contactId);
 }

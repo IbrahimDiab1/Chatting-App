@@ -1,5 +1,6 @@
 package com.liqaa.client.controllers.services.interfaces;
 
+import com.liqaa.shared.models.ChatInfo;
 import com.liqaa.shared.models.entities.Announcement;
 import com.liqaa.shared.models.entities.AnnouncementNotification;
 import com.liqaa.shared.models.entities.Notification;
@@ -19,4 +20,6 @@ public interface NotificationService {
     List<Notification> getAnnouncements(int userId) throws SQLException, RemoteException;
     Boolean deleteNotification(int notificationId)  throws SQLException, RemoteException;
     Boolean addToContactList(int userId, int newContactId) throws RemoteException;
+    ChatInfo createDirectConversation(int userId, User otherUserId) throws RemoteException;
+    User getUserInfoById(int userId) throws RemoteException;
 }

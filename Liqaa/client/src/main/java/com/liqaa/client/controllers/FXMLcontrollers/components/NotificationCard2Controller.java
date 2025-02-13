@@ -68,6 +68,7 @@ public class NotificationCard2Controller implements Initializable {
     public void acceptAction() throws SQLException, RemoteException {
         NotificationServiceImpl.getInstance().addToContactList(7, senderId); // replace 7 with the current user ID
         NotificationServiceImpl.getInstance().deleteNotification(curNotificationId);
+        NotificationServiceImpl.getInstance().createDirectConversation(7, NotificationServiceImpl.getInstance().getUserInfoById(senderId));
     }
 
     public void declineAction() throws SQLException, RemoteException {

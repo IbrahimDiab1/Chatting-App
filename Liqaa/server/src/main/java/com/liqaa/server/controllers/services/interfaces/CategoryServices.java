@@ -14,6 +14,9 @@ public interface CategoryServices
     List<Integer> getCategoryContacts(int categoryId);                  // May be removed later
     public void renameCategory(int categoryId, String newName);
     void removeCategory(int categoryId, int userId);
+
+    void removeCategory(String categoryName, int userId);
+
     List<Category> getCategoriesForContact(int userId, int contactId);
     Map<Category, List<Integer>> getCategoriesWithContacts(int userId);
 }

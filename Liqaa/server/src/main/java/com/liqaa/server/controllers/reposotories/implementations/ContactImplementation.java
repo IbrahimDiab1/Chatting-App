@@ -46,21 +46,20 @@ public class ContactImplementation implements ContactInterface {
     {
         boolean exists=false;
         String query= "SELECT EXISTS (SELECT 1 FROM contacts WHERE user_id = ? AND contact_id = ?)";
-        try(PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query))
-        {
-                statement.setInt(1, userId);
-                statement.setInt(2, contactId);
-                ResultSet resultSet = statement.executeQuery();
-                if (resultSet.next()) {
-                     exists = resultSet.getBoolean(1);
-                    System.out.println("Record exists: " + exists);}
+        try(Connection connection = DatabaseManager.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);) {
+            statement.setInt(1, userId);
+            statement.setInt(2, contactId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                exists = resultSet.getBoolean(1);
+                System.out.println("Record exists: " + exists);
+            }
 
-        }catch (SQLException e)
-        {
-            System.err.println("Is contact throws Exception: " + e.getMessage());
-            e.printStackTrace();
+            return exists;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return exists;
     }
     @Override
     public User getContact(String DisplayName )
@@ -189,7 +188,8 @@ public class ContactImplementation implements ContactInterface {
             return false; // Contact does not exist
         }
         String query = "UPDATE contacts SET is_blocked = true WHERE user_id = ? AND contact_id = ?";
-        try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query)) {
+        try(Connection connection = DatabaseManager.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);) {
             statement.setInt(1, userId);
             statement.setInt(2, contactId);
             int rowsUpdated = statement.executeUpdate();
@@ -197,11 +197,10 @@ public class ContactImplementation implements ContactInterface {
                 System.out.println("Contact blocked successfully");
                 return true; // Contact blocked successfully
             }
+            return false; // Error occurred during update
         } catch (SQLException e) {
-            System.err.println("Error blocking contact: " + e.getMessage());
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return false; // Error occurred during update
     }
 
     @Override
@@ -212,7 +211,8 @@ public class ContactImplementation implements ContactInterface {
             return false; // Contact does not exist
         }
         String query = "UPDATE contacts SET is_blocked = false WHERE user_id = ? AND contact_id = ?";
-        try (PreparedStatement statement = DatabaseManager.getConnection().prepareStatement(query)) {
+        try(Connection connection = DatabaseManager.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);) {
             statement.setInt(1, userId);
             statement.setInt(2, contactId);
             int rowsUpdated = statement.executeUpdate();
@@ -220,11 +220,10 @@ public class ContactImplementation implements ContactInterface {
                 System.out.println("Contact un blocked successfully");
                 return true; // Contact unblocked successfully
             }
+            return false; // Error occurred during update
         } catch (SQLException e) {
-            System.err.println("Error: " + e.getMessage());
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return false; // Error occurred during update
     }
     @Override
     public List<Contacts> getAllContacts (int id)

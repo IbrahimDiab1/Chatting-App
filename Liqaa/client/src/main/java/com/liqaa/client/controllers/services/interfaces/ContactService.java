@@ -10,11 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface ContactService {
-    ObservableList<User> getContacts(int userId); // الحصول على قائمة الاتصالات
-    ObservableList<Category> getCategoriesForContact(int userId, int contactId); // الحصول على الفئات الخاصة بالاتصال
-    boolean deleteContact(int userId, int contactId); // حذف الاتصال
-    boolean renameCategory(int categoryId, String newName); // تغيير اسم الفئة
-
     List<User> getUserFriends(int userId) throws RemoteException;
     List<Category> getUserCategories(int userId) throws RemoteException;
     boolean addContact (int userId, int contactId) throws RemoteException;
@@ -25,6 +20,6 @@ public interface ContactService {
     List<Category> getCategories(int userId) throws RemoteException;
     boolean blockContact (int userId , int contactId) throws RemoteException;
     boolean unblockContact (int userId , int contactId) throws RemoteException;
-
     boolean isBlocked(int userId, int contactId) throws RemoteException;
+    void removeCategory(String categoryName, int userId) throws RemoteException;
 }
