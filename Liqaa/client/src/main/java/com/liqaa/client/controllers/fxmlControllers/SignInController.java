@@ -4,6 +4,7 @@ import com.liqaa.client.controllers.services.implementations.DataCenter;
 import com.liqaa.client.network.ClientImpl;
 import com.liqaa.client.network.ServerConnection;
 import com.liqaa.client.util.SceneManager;
+import com.liqaa.client.util.Settings;
 import com.liqaa.shared.models.entities.User;
 import com.liqaa.shared.network.Server;
 import javafx.event.ActionEvent;
@@ -54,6 +55,9 @@ public class SignInController {
                 PhoneField.clear();
             } else
             {
+                user.setPasswordHash(password);
+                Settings.saveUser(user, DataCenter.getInstance().isRememberMeEnabled());
+
                 DataCenter.getInstance().setCurrentUser(user);
                 SceneManager.getInstance().showPrimaryScene();
             }

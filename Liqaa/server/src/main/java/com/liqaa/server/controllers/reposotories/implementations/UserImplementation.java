@@ -37,28 +37,29 @@ public  static void main(String args[])
 
     System.out.println(s.updateUserImage ("1234567890",s.getUserById(5).getProfilepicture()));
 }
-
     @Override
-   public boolean isPhoneNumberExists(String phoneNumber)
-    {
-        String query = "Select * from users where phone_number = ?";
+    public boolean isPhoneNumberExists(String phoneNumber) {
+        String query = "SELECT 1 FROM users WHERE phone_number = ? LIMIT 1";
         try (Connection connection = DatabaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            {
-                statement.setString(1,phoneNumber);
-                ResultSet result = statement.executeQuery();
-                if (result.next())
-                {  //true: If the new current row is valid
-                    return true;
-                }
+            phoneNumber = phoneNumber.trim(); // Normalize input
+            statement.setString(1, phoneNumber);
 
+            System.out.println("Checking phone: " + phoneNumber); // Debug print
+
+            try (ResultSet result = statement.executeQuery()) {
+                boolean exists = result.next();
+                System.out.println("Exists? " + exists); // Debug print
+                return exists;
             }
-        }catch (SQLException e) {
-            System.out.println("Error in isPhoneNumberExists ");
-            e.printStackTrace(); // Handle or log the exception properly
+        } catch (SQLException e) {
+            System.err.println("Database error in isPhoneNumberExists: " + e.getMessage());
         }
-        return false; // Default to false if an error occurs
+        
+        return false;
     }
+
+
     @Override
     public boolean updateUserMode (String phoneNumber,boolean is_Active)
     {
@@ -102,58 +103,78 @@ public  static void main(String args[])
             e.printStackTrace(); // Handle or log the exception properly
         }
         return false; // Default to false if an error occurs
+    }@Override
+    public boolean insertNewUser(User user) {
+        System.out.println("Attempting to insert user: " + user.getPhoneNumber());
+
+        // Check if the phone number already exists
+        if (isPhoneNumberExists(user.getPhoneNumber())) {
+            System.out.println("User already exists! Skipping insertion.");
+            return false;
+        }
+
+        // SQL query for inserting a new user
+        String query = "INSERT INTO users (phone_number, name, email, profile_picture, password_hash, " +
+                "gender, country, date_of_birth, bio, current_status, is_active) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            if (connection == null) {
+                System.err.println("Database connection is NULL! Aborting insert.");
+                return false;
+            }
+
+            // Set parameters
+            statement.setString(1, user.getPhoneNumber());
+            statement.setString(2, user.getDisplayName());
+            statement.setString(3, user.getEmail());
+
+            // Handle NULL profile picture
+            if (user.getProfilepicture() != null) {
+                statement.setBlob(4, new ByteArrayInputStream(user.getProfilepicture()));
+            } else {
+                statement.setNull(4, Types.BLOB);
+            }
+
+            statement.setString(5, user.getPasswordHash());
+
+            // Ensure ENUM values are correctly set
+            statement.setString(6, (user.getGender() != null) ? user.getGender().name() : null);
+            statement.setString(7, user.getCountry());
+
+            // Handle NULL date of birth
+            if (user.getDateofBirth() != null) {
+                statement.setDate(8, new java.sql.Date(user.getDateofBirth().getTime()));
+            } else {
+                statement.setNull(8, Types.DATE);
+            }
+
+            statement.setString(9, user.getBio());
+
+            // Handle ENUM for `current_status`
+            statement.setString(10, (user.getCurrentstatus() != null) ? user.getCurrentstatus().name() : null);
+
+            statement.setBoolean(11, user.isActive());
+
+            // Execute the query
+            int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("User inserted successfully!");
+                return true;
+            } else {
+                System.out.println("Failed to insert user.");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Database error in insertNewUser: " + e.getMessage());
+            e.printStackTrace();
+            return false; // Ensure failure is reflected
+        }
     }
-   @Override
-    public boolean insertNewUser (User user)
-    {
-       boolean result=false ;
-           if (isPhoneNumberExists(user.getPhoneNumber()))
-           {
-               System.out.println("this user exists");
 
-           }
-           else
-           {
-               String query = "INSERT INTO users ("
-                       + "phone_number, name, email, profile_picture, password_hash, "
-                       + "gender, country, date_of_birth, bio, current_status, is_active"
-                       + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-               try (Connection connection = DatabaseManager.getConnection();
-                    PreparedStatement statement = connection.prepareStatement(query)) {
-                   {
-
-                       // Set parameters
-                       statement.setString(1,user.getPhoneNumber());
-                       statement.setString(2, user.getDisplayName());
-                       statement.setString(3, user.getEmail());
-                       statement.setBlob(4, new ByteArrayInputStream(user.getProfilepicture()));
-                       statement.setString(5, user.getPasswordHash());
-                       statement.setString(6, user.getGender().toString());
-                       statement.setString(7, user.getCountry());
-                       statement.setDate(8, (user.getDateofBirth() != null) ? (new java.sql.Date(user.getDateofBirth().getTime())) : null);
-                       statement.setString(9, user.getBio());
-                       statement.setString(10, user.getCurrentstatus().toString());
-                       statement.setBoolean(11, user.isActive());
-                   /*
-            ByteArrayInputStream profilePhoto = new ByteArrayInputStream(user.getProfilePhoto());
-            ps.setBlob(11, profilePhoto);
-                   * */
-                       // Execute the query
-                       // statement.executeUpdate();
-                       if (statement.executeUpdate() > 0) {
-                           System.out.println("User inserted successfully!");
-                           result= true;
-                       } else {
-
-                           System.out.println("Failed to insert user.");
-                       }
-                   }
-               }catch (SQLException e) {
-                   e.printStackTrace(); // Handle or log the exception properly
-               }
-           }
-           return result ;
-    }
 
     @Override
     public boolean deleteUser (int userId)

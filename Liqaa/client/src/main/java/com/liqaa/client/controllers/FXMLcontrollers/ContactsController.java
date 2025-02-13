@@ -1,7 +1,9 @@
 package com.liqaa.client.controllers.FXMLcontrollers;
 
+import com.liqaa.client.controllers.services.implementations.DataCenter;
 import com.liqaa.client.network.ServerConnection;
 import com.liqaa.client.util.SceneManager;
+import com.liqaa.client.util.Settings;
 import com.liqaa.shared.models.entities.Group;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -237,7 +239,14 @@ public class ContactsController implements Initializable {
 
     @FXML
     private void logout_action(MouseEvent event) {
-        System.out.println("Logout button clicked!");
+        Settings.clearCredentials();
+        try {
+            ServerConnection.getServer().logout(DataCenter.getInstance().getcurrentUserId());
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
+        SceneManager.getInstance().showRememberedSignIn();
     }
 
     private String converCategoriesToString(List<Category> userCategories){

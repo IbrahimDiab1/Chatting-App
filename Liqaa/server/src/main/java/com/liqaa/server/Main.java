@@ -23,19 +23,13 @@ public class Main extends Application
     @Override
     public void start(Stage stage)
     {
-        try {
-            Image appIcon = new Image(getClass().getResourceAsStream("/com/liqaa/server/view/images/logoIcon.png"));
-            stage.getIcons().add(appIcon);
+        Image appIcon = new Image(getClass().getResourceAsStream("/com/liqaa/server/view/images/logoIcon.png"));
+        stage.getIcons().add(appIcon);
 
-            SceneManager.initialize(stage);
-            Parent root = FXMLLoader.load(Main.class.getResource(FilePaths.LOGIN_SCREEN_FXML));
-            Scene loginScene = new Scene(root, 1024, 768);
-            SceneManager.getInstance().switchScene(loginScene);
-            stage.show();
-        } catch (IOException e) {
-            System.err.println("Error loading FXML file: " + e.getMessage());
-            e.printStackTrace();
-        }
+        stage.setTitle("Liqaa");
+        SceneManager.initialize(stage);
+        SceneManager.getInstance().showLogin();
+        stage.show();
     }
 
     public static void main(String[] args) throws SQLException, RemoteException {

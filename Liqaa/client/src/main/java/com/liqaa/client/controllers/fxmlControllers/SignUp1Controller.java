@@ -1,213 +1,299 @@
 package com.liqaa.client.controllers.FXMLcontrollers;
 
-import java.io.IOException;
-import java.time.LocalDate;
-
-import com.liqaa.client.Main;
 import com.liqaa.client.util.SceneManager;
+import com.liqaa.shared.models.entities.User;
+import com.liqaa.shared.models.enums.Gender;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class SignUp1Controller {
+import java.net.URL;
+import java.util.ResourceBundle;
 
-    @FXML
-    private Button SignInButton;
-
-    @FXML
-    private Button SignUpButton;
-
-    @FXML
-    private Button NextButton;
-
-    @FXML
-    private TextField NameField;
-
-    @FXML
-    private TextField PhoneField;
-
-    @FXML
-    private TextField EmailField;
+public class SignUp1Controller implements Initializable {
 
     @FXML
     private PasswordField passwordField;
 
     @FXML
-    private PasswordField ConfirmationpasswordField;
-
-    @FXML
-    private TextField CountryField;
-
-    @FXML
-    private ComboBox<String> GenderField;
-
-    @FXML
-    private DatePicker DateField;
-
+    private Label NameLabel;
     @FXML
     private Label PhoneLabel;
-
     @FXML
-    private Label EmailLabel;
-
+    private PasswordField ConfirmationpasswordField;
+    @FXML
+    private Button NextButton;
     @FXML
     private Label PasswordLabel;
-
     @FXML
-    private Label ConfirmationPasswordLabel;
-
+    private Label EmailLabel;
+    @FXML
+    private Button SignInButton;
+    @FXML
+    private TextField CountryField;
+    @FXML
+    private ComboBox<String> GenderField;
+    @FXML
+    private Button SignUpButton;
+    @FXML
+    private TextField NameField;
+    @FXML
+    private TextField EmailField;
+    @FXML
+    private TextField PhoneField;
+    @FXML
+    private DatePicker DateField;
     @FXML
     private Label CountryLabel;
     @FXML
-    private Label NameLabel;
+    private Label ConfirmationPasswordLabel;
 
-    private String name;
-    private String phone;
-    private String email;
-    private String password=null;
-    private String confirmPassword;
-    private String country;
-    private String gender;
-    private LocalDate date;
-
-    public void initialize() {
-
-        GenderField.getItems().addAll("Male", "Female");
-        SignUpButton.setDisable(true);
-        password=null;
-        confirmPassword=null;
-
-    }
-
-    // Event Handlers
+    // Added missing error labels:
     @FXML
-    public void setSignInButtonOnAction() {
-            System.out.println("Sign In button clicked.");
-            SceneManager.getInstance().showSignInScene();
-
-            // Add logic to handle sign-in action
-    }
-
+    private Label GenderLabel;
     @FXML
-    public void setNextButtonOnAction() {
-            System.out.println("Next button clicked.");
+    private Label DateLabel;
 
-            name = NameField.getText();
-            phone = PhoneField.getText();
-            email = EmailField.getText();
-            password = passwordField.getText();
-            confirmPassword = ConfirmationpasswordField.getText();
-            country = CountryField.getText();
-            gender = GenderField.getValue();
-            // Check if all sections are filled or not
-            if (checkAllData()) {
-                SceneManager.getInstance().showSignUpScene2();
-            } else {
-                Alert a = new Alert(Alert.AlertType.NONE);
-                a.setAlertType(Alert.AlertType.INFORMATION);
-                a.setContentText("Please complete all required fields before proceeding.");
-                a.show(); // Add this line to display the alert
+    private User tempUser;
+    public static User User1 =new User();
+
+    private static final Font ERROR_FONT = new Font("Arial", 10);
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        Platform.runLater(() -> {
+            if (GenderField != null) {
+                GenderField.getItems().clear();
+                GenderField.getItems().addAll("male", "female");
             }
-
-            // Test output
-            System.out.println(name);
-            System.out.println(phone);
-            System.out.println(password);
-            System.out.println(country);
-            System.out.println(confirmPassword);
-            System.out.println(gender);
-            System.out.println(email);
-            System.out.println(date);
+            clearAllErrors();
+            setupValidationListeners();
+            updateNextButtonState();
+        });
     }
 
-    @FXML
-    public void handleNameField() {
-
-        NameLabel.setText("");
-        if (!UserInfoValidation.isVaildName( NameField.getText())) {
-            NameLabel.setFont(new Font("Arial", 10)); // Set font and size
-            NameLabel.setTextFill(Color.RED); // Set text color
-            NameLabel.setText("Please Enter Characters Only"); //Message to user
-            NameField.clear();
-            name=null;
+    private void setupValidationListeners() {
+        if (NameField != null) {
+            NameField.textProperty().addListener((obs, oldVal, newVal) -> {
+                if (!UserInfoValidation.isVaildName(newVal)) {
+                    showFieldError(NameLabel, "Please enter characters only");
+                } else {
+                    NameLabel.setText("");
+                }
+                updateNextButtonState();
+            });
         }
 
-    }
+        if (PhoneField != null) {
+            PhoneField.textProperty().addListener((obs, oldVal, newVal) -> {
+                if (!UserInfoValidation.isValidPhoneNumber(newVal)) {
+                    showFieldError(PhoneLabel, "Please enter a valid phone number");
+                } else {
+                    PhoneLabel.setText("");
+                }
+                updateNextButtonState();
+            });
+        }
 
-    @FXML
-    public void handlePhoneField() {
-        PhoneLabel.setText("");
-        if (!UserInfoValidation.isValidPhoneNumber(PhoneField.getText())) {
-            PhoneLabel.setFont(new Font("Arial", 10)); // Set font and size
-            PhoneLabel.setTextFill(Color.RED); // Set text color
-            PhoneLabel.setText("Please Enter a Valid Number"); //Message to user
-            PhoneField.clear();
-            phone=null;
+        if (EmailField != null) {
+            EmailField.textProperty().addListener((obs, oldVal, newVal) -> {
+                if (!UserInfoValidation.isVaildEmail(newVal)) {
+                    showFieldError(EmailLabel, "Please enter a valid email");
+                } else {
+                    EmailLabel.setText("");
+                }
+                updateNextButtonState();
+            });
+        }
+
+        if (passwordField != null) {
+            passwordField.textProperty().addListener((obs, oldVal, newVal) -> {
+                if (!UserInfoValidation.isValidPassword(newVal)) {
+                    showFieldError(PasswordLabel, "Password must be at least 6 characters with letters and numbers");
+                } else {
+                    PasswordLabel.setText("");
+                }
+                updateNextButtonState();
+            });
+        }
+
+        if (ConfirmationpasswordField != null) {
+            ConfirmationpasswordField.textProperty().addListener((obs, oldVal, newVal) -> {
+                if (!passwordField.getText().equals(newVal)) {
+                    showFieldError(ConfirmationPasswordLabel, "Passwords do not match");
+                } else {
+                    ConfirmationPasswordLabel.setText("");
+                }
+                updateNextButtonState();
+            });
+        }
+
+        if (CountryField != null) {
+            CountryField.textProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal == null || newVal.trim().isEmpty()) {
+                    showFieldError(CountryLabel, "Please enter a country");
+                } else {
+                    CountryLabel.setText("");
+                }
+                updateNextButtonState();
+            });
+        }
+
+        if (GenderField != null) {
+            GenderField.valueProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal == null) {
+                    showFieldError(GenderLabel, "Please select a gender");
+                } else {
+                    GenderLabel.setText("Male");
+                }
+                updateNextButtonState();
+            });
+        }
+
+        if (DateField != null) {
+            DateField.valueProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal == null) {
+                    showFieldError(DateLabel, "Please select a date of birth");
+                } else {
+                    DateLabel.setText("");
+                }
+                updateNextButtonState();
+            });
         }
     }
 
-    @FXML
-    public void handleEmailField() {
-        EmailLabel.setText("");
-        if (!UserInfoValidation.isVaildEmail(EmailField.getText())) {
-            EmailLabel.setFont(new Font("Arial", 10)); // Set font and size
-            EmailLabel.setTextFill(Color.RED); // Set text color
-            EmailLabel.setText("Please Enter a Valid Email"); //Message to user
-            EmailField.clear();
-            email=null;
+    private void showFieldError(Label label, String message) {
+        if (label != null) {
+            label.setFont(ERROR_FONT);
+            label.setTextFill(Color.RED);
+            label.setText(message);
         }
     }
 
-    @FXML
-    public void handlePassword() {
-        PasswordLabel.setText("");
-        if (!UserInfoValidation.isValidPassword(passwordField.getText())) {
-            PasswordLabel.setFont(new Font("Arial", 9)); // Set font and size
-            PasswordLabel.setTextFill(Color.RED); // Set text color
-            PasswordLabel.setText("Password must be at least 6 characters long and contain both letters and numbers");    //Message to user
-            passwordField.clear();
-            password=null;
-
+    private void clearAllErrors() {
+        Label[] labels = {
+                EmailLabel, NameLabel, PhoneLabel, PasswordLabel,
+                ConfirmationPasswordLabel, CountryLabel, GenderLabel, DateLabel
+        };
+        for (Label label : labels) {
+            if (label != null) {
+                label.setText("");
+            }
         }
     }
 
-    @FXML
-    public void handleConfirmationpassword()  {
-        ConfirmationPasswordLabel.setText("");
-        if ((passwordField.getText() == null) || !passwordField.getText().equals(ConfirmationpasswordField.getText()))
-        {
-            ConfirmationPasswordLabel.setFont(new Font("Arial", 10)); // Set font and size
-            ConfirmationPasswordLabel.setTextFill(Color.RED); // Set text color
-            ConfirmationPasswordLabel.setText("Passwords do not match. Please re-enter your password.");    //Message to user
-            ConfirmationpasswordField.clear();
-            //confirmPassword=null;
+    private void updateNextButtonState() {
+        if (NextButton != null) {
+            NextButton.setDisable(!isFormValid());
         }
     }
 
-    @FXML
-    public void handleCountryField() {
-        country = CountryField.getText();
-        System.out.println("Country entered: " + country);
+    private boolean isFormValid() {
+        boolean isValid = NameField != null && NameField.getText() != null && !NameField.getText().isEmpty() &&
+                PhoneField != null && PhoneField.getText() != null && !PhoneField.getText().isEmpty() &&
+                EmailField != null && EmailField.getText() != null && !EmailField.getText().isEmpty() &&
+                passwordField != null && passwordField.getText() != null && !passwordField.getText().isEmpty() &&
+                ConfirmationpasswordField != null && ConfirmationpasswordField.getText() != null && !ConfirmationpasswordField.getText().isEmpty() &&
+                CountryField != null && CountryField.getText() != null && !CountryField.getText().isEmpty() &&
+                GenderField != null && GenderField.getValue() != null &&
+                DateField != null && DateField.getValue() != null;
+
+        System.out.println("isFormValid: " + isValid);
+        return isValid;
     }
 
     @FXML
-    public void handleGenderField() {
-        gender = GenderField.getValue();
-        System.out.println("Gender selected: " + gender);
+    public void setSignInButtonOnAction(ActionEvent event) {
+        SceneManager.getInstance().showSignInScene();
     }
 
     @FXML
-    public void handleDateField() {
-        date = DateField.getValue() != null ? DateField.getValue() : null;
-        System.out.println("Date selected: " + date);
-    }
-    public boolean checkAllData()
-    {
-        if((name!=null)&&(phone!=null)&&(password!=null)&&(confirmPassword!=null)&&(gender!=null)&&(country!=null)&&(email!=null)&&(date!=null))
-        {
-            return true;
+    public void setNextButtonOnAction(ActionEvent event) {
+        if (validateAllFields()) {
+            User1= createTempUser();
+            SceneManager.getInstance().showSignUpScene2();
         }
-        return false;
+    }
+
+    private boolean validateAllFields() {
+        boolean isValid = true;
+
+        if (NameField == null || !UserInfoValidation.isVaildName(NameField.getText())) {
+            showFieldError(NameLabel, "Please enter characters only");
+            isValid = false;
+        }
+
+        if (PhoneField == null || !UserInfoValidation.isValidPhoneNumber(PhoneField.getText())) {
+            showFieldError(PhoneLabel, "Please enter a valid phone number");
+            isValid = false;
+        }
+
+        if (EmailField == null || !UserInfoValidation.isVaildEmail(EmailField.getText())) {
+            showFieldError(EmailLabel, "Please enter a valid email");
+            isValid = false;
+        }
+
+        if (passwordField == null || !UserInfoValidation.isValidPassword(passwordField.getText())) {
+            showFieldError(PasswordLabel, "Password must be at least 6 characters with letters and numbers");
+            isValid = false;
+        }
+
+        if (passwordField == null || ConfirmationpasswordField == null ||
+                !passwordField.getText().equals(ConfirmationpasswordField.getText())) {
+            showFieldError(ConfirmationPasswordLabel, "Passwords do not match");
+            isValid = false;
+        }
+
+        if (CountryField == null || CountryField.getText() == null || CountryField.getText().trim().isEmpty()) {
+            showFieldError(CountryLabel, "Please enter a country");
+            isValid = false;
+        }
+
+        if (GenderField == null || GenderField.getValue() == null) {
+            showFieldError(GenderLabel, "Please select a gender");
+            isValid = false;
+        }
+
+        if (DateField == null || DateField.getValue() == null) {
+            showFieldError(DateLabel, "Please select a date of birth");
+            isValid = false;
+        }
+
+        if (!isValid) {
+            showAlert("Please correct the errors before proceeding.");
+        }
+
+        return isValid;
+    }
+
+    private User createTempUser() {
+        tempUser = new User();
+        if (NameField != null) tempUser.setDisplayName(NameField.getText());
+        if (PhoneField != null) tempUser.setPhoneNumber(PhoneField.getText());
+        if (EmailField != null) tempUser.setEmail(EmailField.getText());
+        if (passwordField != null) tempUser.setPasswordHash(passwordField.getText());
+        if (CountryField != null) tempUser.setCountry(CountryField.getText());
+
+        if (GenderField != null && GenderField.getValue() != null) {
+            String genderInput = GenderField.getValue().toString();
+            tempUser.setGender(Gender.valueOf(genderInput.toUpperCase()));
+        }
+
+        if (DateField != null && DateField.getValue() != null) {
+            tempUser.setDateofBirth(java.sql.Date.valueOf(DateField.getValue().toString()));
+        }
+        return tempUser;
+    }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Registration Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.show();
     }
 }

@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="609.0" prefWidth="891.0" style="-fx-background-radius: 0 0 20 20; -fx-border-radius: 20 20 20 20;" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.liqaa.server.controllers.FXMLcontrollers.StatisticsController">
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="609.0" prefWidth="891.0" style="-fx-background-radius: 0 0 20 20; -fx-border-radius: 20 20 20 20;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.liqaa.server.controllers.FXMLcontrollers.StatisticsController">
     <left>
         <AnchorPane prefHeight="534.0" prefWidth="221.0" style="-fx-background-color: e5e7eb;" BorderPane.alignment="CENTER">
             <children>
@@ -26,7 +26,7 @@
                         <Image url="@../images/logo.png" />
                     </image>
                 </ImageView>
-                <Pane fx:id="ManagerId" layoutY="195.0" onMouseClicked="#switchToManager" prefHeight="50.0" prefWidth="222.0" style="-fx-background-radius: 25px 0px 0px 25px; -fx-cursor: hand;">
+                <Pane fx:id="ManagerId" layoutY="195.0" onMouseClicked="#switchToManager" prefHeight="50.0" prefWidth="222.0" style="-fx-background-radius: 25px 0px 0px 25px; -fx-cursor: hand;" styleClass="hover-effect" stylesheets="@../styles/hovor.css">
                     <children>
                         <ImageView fitHeight="32.0" fitWidth="40.0" layoutX="4.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -40,7 +40,7 @@
                         </Label>
                     </children>
                 </Pane>
-                <Pane layoutY="253.0" prefHeight="50.0" prefWidth="222.0" style="-fx-background-radius: 25px 0px 0px 25px; -fx-cursor: hand; -fx-background-color: #ffffff;">
+                <Pane layoutY="253.0" prefHeight="50.0" prefWidth="222.0" style="-fx-background-radius: 25px 0px 0px 25px; -fx-background-color: #ffffff;" styleClass="hover-effect" stylesheets="@../styles/hovor.css">
                     <children>
                         <ImageView fitHeight="32.0" fitWidth="39.0" layoutX="4.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -54,7 +54,7 @@
                         </Label>
                     </children>
                 </Pane>
-                <Pane fx:id="AnnouncementId" layoutY="311.0" onMouseClicked="#switchToAnnouncements" prefHeight="50.0" prefWidth="222.0" style="-fx-background-radius: 25px 0px 0px 25px; -fx-cursor: hand;">
+                <Pane fx:id="AnnouncementId" layoutY="311.0" onMouseClicked="#switchToAnnouncements" prefHeight="50.0" prefWidth="222.0" style="-fx-background-radius: 25px 0px 0px 25px; -fx-cursor: hand;" styleClass="hover-effect" stylesheets="@../styles/hovor.css">
                     <children>
                         <ImageView fitHeight="32.0" fitWidth="39.0" layoutX="4.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -68,7 +68,7 @@
                         </Label>
                     </children>
                 </Pane>
-                <Pane fx:id="logoutId" layoutY="369.0" onMouseClicked="#logout" prefHeight="50.0" prefWidth="222.0" style="-fx-background-radius: 25px 0px 0px 25px; -fx-cursor: hand;">
+                <Pane fx:id="logoutId" layoutY="369.0" onMouseClicked="#logout" prefHeight="50.0" prefWidth="222.0" style="-fx-background-radius: 25px 0px 0px 25px; -fx-cursor: hand;" styleClass="hover-effect" stylesheets="@../styles/hovor.css">
                     <children>
                         <ImageView fitHeight="32.0" fitWidth="39.0" layoutX="4.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -137,7 +137,7 @@
                      <bottom>
                         <HBox prefHeight="68.0" prefWidth="626.0" BorderPane.alignment="CENTER">
                            <children>
-                              <AnchorPane prefHeight="73.0" prefWidth="155.0" style="-fx-background-color: f9fafb; -fx-background-radius: 20 20 20 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 0, 5);" stylesheets="@../styles/shadow.css" HBox.hgrow="SOMETIMES">
+                              <AnchorPane prefHeight="73.0" prefWidth="155.0" style="-fx-background-color: #f9fafb; -fx-background-radius: 20 20 20 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 0, 5);" stylesheets="@../styles/shadow.css" HBox.hgrow="SOMETIMES">
                                  <children>
                                     <Pane layoutX="14.0" layoutY="16.0" style="-fx-background-color: #3b82f6; -fx-background-radius: 7 7 7 7;">
                                        <children>
@@ -161,7 +161,7 @@
                                  </children>
                               </AnchorPane>
                               <Pane prefHeight="72.0" prefWidth="34.0" HBox.hgrow="SOMETIMES" />
-                              <AnchorPane prefHeight="68.0" prefWidth="153.0" style="-fx-background-color: f9fafb; -fx-background-radius: 20 20 20 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 0, 5);" stylesheets="@../styles/shadow.css" HBox.hgrow="SOMETIMES">
+                              <AnchorPane prefHeight="68.0" prefWidth="153.0" style="-fx-background-color: #f9fafb; -fx-background-radius: 20 20 20 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 0, 5);" stylesheets="@../styles/shadow.css" HBox.hgrow="SOMETIMES">
                                  <children>
                                     <Pane layoutX="14.0" layoutY="16.0" prefHeight="40.0" prefWidth="41.6" style="-fx-background-color: #22c55e; -fx-background-radius: 7 7 7 7;">
                                        <children>
@@ -185,7 +185,7 @@
                                  </children>
                               </AnchorPane>
                               <Pane prefHeight="72.0" prefWidth="34.0" HBox.hgrow="SOMETIMES" />
-                              <AnchorPane prefHeight="73.0" prefWidth="155.0" style="-fx-background-color: f9fafb; -fx-background-radius: 20 20 20 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 0, 5);" stylesheets="@../styles/shadow.css" HBox.hgrow="SOMETIMES">
+                              <AnchorPane prefHeight="73.0" prefWidth="155.0" style="-fx-background-color: #f9fafb; -fx-background-radius: 20 20 20 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 0, 5);" stylesheets="@../styles/shadow.css" HBox.hgrow="SOMETIMES">
                                  <children>
                                     <Pane layoutX="14.0" layoutY="16.0" prefHeight="40.0" prefWidth="42.0" style="-fx-background-color: #ef4444; -fx-background-radius: 7 7 7 7;">
                                        <children>
@@ -209,7 +209,7 @@
                                  </children>
                               </AnchorPane>
                               <Pane prefHeight="72.0" prefWidth="34.0" HBox.hgrow="SOMETIMES" />
-                              <AnchorPane prefHeight="73.0" prefWidth="155.0" style="-fx-background-color: f9fafb; -fx-background-radius: 20 20 20 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 0, 5);" stylesheets="@../styles/shadow.css" HBox.hgrow="SOMETIMES">
+                              <AnchorPane prefHeight="73.0" prefWidth="155.0" style="-fx-background-color: #f9fafb; -fx-background-radius: 20 20 20 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 0, 5);" stylesheets="@../styles/shadow.css" HBox.hgrow="SOMETIMES">
                                  <children>
                                     <Pane layoutX="14.0" layoutY="16.0" prefHeight="40.0" prefWidth="41.6" style="-fx-background-color: #a855f7; -fx-background-radius: 7 7 7 7;">
                                        <children>
@@ -257,7 +257,7 @@
                               <Pane prefHeight="181.0" prefWidth="198.0" />
                               <Pane prefHeight="176.0" prefWidth="26.0" />
                               <Pane prefHeight="176.0" prefWidth="152.0" />
-                              <AnchorPane prefHeight="182.0" prefWidth="206.0" style="-fx-background-color: Transparent; -fx-background-radius: 20 20 20 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 0, 5);" stylesheets="@../styles/shadow.css">
+                              <AnchorPane prefHeight="182.0" prefWidth="206.0" style="-fx-background-color: transparent; -fx-background-radius: 20 20 20 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0, 0, 5);">
                                  <children>
                                     <HBox layoutX="2.0" layoutY="33.0" prefHeight="142.0" prefWidth="290.0" spacing="20.0">
                                        <children>

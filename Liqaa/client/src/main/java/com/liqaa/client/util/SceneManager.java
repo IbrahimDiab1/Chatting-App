@@ -1,5 +1,6 @@
 package com.liqaa.client.util;
 
+import com.liqaa.shared.models.entities.User;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -55,6 +56,21 @@ public class SceneManager
             e.printStackTrace();
         }
     }
+
+    public void showSettings() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/liqaa/client/view/fxml/setting.fxml"));
+            Scene newScene = new Scene(root);
+            Stage newStage = new Stage();
+            newStage.initStyle(StageStyle.UNDECORATED);
+            newStage.setScene(newScene);
+            newStage.show();
+            setCurrentScene(SceneType.UNKNOWN);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void showPrimaryScene() {
         try {
@@ -117,10 +133,25 @@ public class SceneManager
         }
     }
 
+    public void showRememberedSignIn() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/com/liqaa/client/view/fxml/rememberSettings.fxml"));
+            Scene newScene = new Scene(root);
+            double width = stage.getWidth();
+            double height = stage.getHeight();
+            stage.setScene(newScene);
+            stage.setWidth(width);
+            stage.setHeight(height);
+            setCurrentScene(SceneType.SIGN_IN);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void showSignUpScene1() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/liqaa/client/view/fxml/signUp1.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/com/liqaa/client/view/fxml/SignUp1.fxml"));
             Scene newScene = new Scene(root);
             double width = stage.getWidth();
             double height = stage.getHeight();
@@ -133,7 +164,7 @@ public class SceneManager
         }
     }
 
-    public void showSignUpScene2() {
+    public void showSignUpScene2( ) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/com/liqaa/client/view/fxml/signUp2.fxml"));
             Scene newScene = new Scene(root);

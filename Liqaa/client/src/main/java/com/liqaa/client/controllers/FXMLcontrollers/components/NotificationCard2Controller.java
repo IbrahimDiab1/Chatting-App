@@ -1,5 +1,7 @@
 package com.liqaa.client.controllers.FXMLcontrollers.components;
 
+import com.liqaa.client.controllers.services.implementations.ConversationServices;
+import com.liqaa.client.controllers.services.implementations.DataCenter;
 import com.liqaa.client.controllers.services.implementations.NotificationServiceImpl;
 import com.liqaa.client.util.DateFormatter;
 import com.liqaa.shared.models.entities.Notification;
@@ -68,9 +70,12 @@ public class NotificationCard2Controller implements Initializable {
     public void acceptAction() throws SQLException, RemoteException {
         NotificationServiceImpl.getInstance().addToContactList(7, senderId); // replace 7 with the current user ID
         NotificationServiceImpl.getInstance().deleteNotification(curNotificationId);
+        // ConversationServices.getInstance().createDirectConversation(DataCenter.getInstance().getcurrentUserId(),senderId);
+        // todo: create a direct conversation
     }
 
     public void declineAction() throws SQLException, RemoteException {
         NotificationServiceImpl.getInstance().deleteNotification(curNotificationId);
+        // todo: delete direct conversation
     }
 }

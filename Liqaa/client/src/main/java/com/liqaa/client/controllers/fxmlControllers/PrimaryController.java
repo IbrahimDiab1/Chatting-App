@@ -6,7 +6,9 @@ import com.liqaa.client.controllers.services.implementations.BaseMessageControll
 import com.liqaa.client.controllers.services.implementations.ConversationServices;
 import com.liqaa.client.controllers.services.implementations.DataCenter;
 import com.liqaa.client.controllers.services.implementations.MessageServices;
+import com.liqaa.client.network.ServerConnection;
 import com.liqaa.client.util.SceneManager;
+import com.liqaa.client.util.Settings;
 import com.liqaa.shared.models.ChatInfo;
 import com.liqaa.shared.models.entities.FileMessage;
 import com.liqaa.shared.models.entities.Message;
@@ -45,6 +47,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.rmi.RemoteException;
 import java.time.LocalDateTime;
 
 import com.liqaa.shared.models.enums.CurrentStatus;
@@ -398,9 +401,10 @@ public class PrimaryController
     }
 
     @FXML
-    public void logout_action(MouseEvent mouseEvent) {
-        System.out.println("logout btn is clicked");
-        // Unfinished action – leave as is for now.
+    public void logout_action(MouseEvent mouseEvent) throws RemoteException {
+        Settings.clearCredentials();
+        ServerConnection.getServer().logout(DataCenter.getInstance().getcurrentUserId());
+        SceneManager.getInstance().showRememberedSignIn();
     }
     @FXML
     public void addEmoji(MouseEvent event)

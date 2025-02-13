@@ -18,7 +18,7 @@
 
 <BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="609.0" prefWidth="891.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.liqaa.server.controllers.FXMLcontrollers.ManagerController">
   <left>
-    <AnchorPane prefHeight="534.0" prefWidth="221.0" style="-fx-background-color: e5e7eb;" BorderPane.alignment="CENTER">
+    <AnchorPane prefHeight="534.0" prefWidth="221.0" style="-fx-background-color: #e5e7eb;" BorderPane.alignment="CENTER">
       <children>
         <ImageView fitHeight="98.0" fitWidth="176.0" layoutX="23.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true">
           <image>

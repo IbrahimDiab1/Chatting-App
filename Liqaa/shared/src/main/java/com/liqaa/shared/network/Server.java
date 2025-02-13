@@ -14,8 +14,11 @@ public interface Server extends Remote
 {
     void unregisterClient(int userId) throws RemoteException;
 
-    public User signIn ( Client client, String userPhone, String userPassword) throws RemoteException;
-    public boolean logout(String userPhone) throws RemoteException;
+    void registerClient(Client client, int id) throws RemoteException;
+
+    public User signIn (Client client, String userPhone, String userPassword) throws RemoteException;
+    void logout(int userId) throws RemoteException;
+
     public User signUp(User user) throws RemoteException;
 
     public User getUserInfo(String userPhone) throws RemoteException;
@@ -123,5 +126,6 @@ public interface Server extends Remote
     void removeCategory(String categoryName, int userId) throws RemoteException;
     String ping() throws RemoteException;
 
+    String getResponse(String userMessage) throws RemoteException;
 
 }

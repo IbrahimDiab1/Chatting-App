@@ -25,6 +25,7 @@ public class DataCenter
     private ChatInfo currentChat;
     private int currentConversationId;
     private SceneManager.SceneType currentScene;
+    private boolean rememberMeState = true;
 
     private DataCenter() {}
 
@@ -171,6 +172,14 @@ public class DataCenter
         if (index >= 0) {
             chatList.set(index, updatedChat);
         }
+    }
+
+    public boolean isRememberMeEnabled() {
+        return rememberMeState;
+    }
+
+    void setRememberMeState(boolean getRememberMeCheckBox) {
+        this.rememberMeState = getRememberMeCheckBox;
     }
 
 }

@@ -1,14 +1,11 @@
 package com.liqaa.server.controllers.FXMLcontrollers;
 
-import com.liqaa.server.Main;
 import com.liqaa.server.controllers.services.implementations.MessageServiceImpl;
 import com.liqaa.server.controllers.services.implementations.UserServicesImpl;
-import com.liqaa.server.util.FilePaths;
 import com.liqaa.server.util.SceneManager;
-import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.StackedBarChart;
@@ -18,106 +15,82 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class StatisticsController {
 
     @FXML
-    private Label Countries;
+    private Label countriesLabel;
     @FXML
-    private StackedBarChart<String, Number> DailyEntries;
+    private StackedBarChart<String, Number> dailyEntriesChart;
     @FXML
-    private CategoryAxis DailyEntries_X;
+    private NumberAxis dailyEntriesYAxis;
     @FXML
-    private NumberAxis DailyEntries_Y;
+    private Text femaleText;
     @FXML
-    private Text FemaleText;
+    private Text maleText;
     @FXML
-    private Text MaleText;
+    private Label offlineUserLabel;
     @FXML
-    private Label OfflineUser;
+    private Label onlineUserLabel;
     @FXML
-    private Label OnlineUser;
+    private StackedBarChart<String, Number> topCountriesChart;
     @FXML
-    private StackedBarChart<String, Number> TopCountriesChart;
+    private NumberAxis topCountriesChartYAxis;
     @FXML
-    private CategoryAxis TopCountriesChart_X;
-    @FXML
-    private NumberAxis TopCountriesChart_Y;
-    @FXML
-    private Label TotalUser;
+    private Label totalUserLabel;
 
-    private ScheduledExecutorService backgroundExecutor;
     @FXML
-    private Pane AnnouncementId;
+    private Pane announcementPane;
     @FXML
-    private Pane logoutId;
+    private Pane logoutPane;
     @FXML
-    private Pane ManagerId;
+    private Pane managerPane;
 
     public void initialize() {
-        // Initialize placeholder data
         initializePlaceholderChartData();
-
-        // Set chart axis labels
-        TopCountriesChart_Y.setLabel("Number of Users");
-        DailyEntries_Y.setLabel("Number of Messages");
-
-        DailyEntries.setLegendVisible(false);
-
-        // Start background updates
-        startBackgroundUpdates();
+        topCountriesChartYAxis.setLabel("Number of Users");
+        dailyEntriesYAxis.setLabel("Number of Messages");
+        dailyEntriesChart.setLegendVisible(false);
     }
 
     @FXML
-    public void logout(MouseEvent event) throws IOException {
-        SceneManager.getInstance().switchScene(new Scene(FXMLLoader.load(Main.class.getResource(FilePaths.LOGIN_SCREEN_FXML))));
+    public void logout(MouseEvent event) {
+        SceneManager.getInstance().showLogin();
     }
 
     @FXML
-    public void switchToAnnouncements(MouseEvent event) throws IOException {
-        System.out.println("Switching to Announcements...");
-        SceneManager.getInstance().switchScene(new Scene(FXMLLoader.load(Main.class.getResource(FilePaths.ANNOUNCEMENTS_SCREEN_FXML))));
+    public void switchToAnnouncements(MouseEvent event) {
+        SceneManager.getInstance().showAnnouncements();
     }
 
     @FXML
     public void switchToManager(MouseEvent event) {
-        onDestroy(); // Shut down background threads
-        Platform.runLater(() -> {try {
-
-            SceneManager.getInstance().switchScene(new Scene(FXMLLoader.load(Main.class.getResource(FilePaths.MANAGER_SCREEN_FXML))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }});
+        SceneManager.getInstance().showManager();
     }
-
-//    private void switchScene(String fxmlPath) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader(Main.class.getResource(fxmlPath));
-//            Scene scene = new Scene(loader.load());
-//            Platform.runLater(() -> SceneManager.getInstance().switchScene(scene));
-//        } catch (IOException e) {
-//            System.err.println("Error loading scene: " + fxmlPath);
-//            e.printStackTrace();
-//        }
-//    }
 
     private void initializePlaceholderChartData() {
-        Platform.runLater(() -> {
-            XYChart.Series<String, Number> placeholderSeries = new XYChart.Series<>();
-            placeholderSeries.getData().add(new XYChart.Data<>("Loading", 0));
-            TopCountriesChart.getData().add(placeholderSeries);
-            DailyEntries.getData().add(placeholderSeries);
-        });
+        ObservableList<XYChart.Series<String, Number>> data = topCountriesChart.getData();
+        if (data == null) {
+            data = FXCollections.observableArrayList();
+            topCountriesChart.setData(data);
+        }
+        XYChart.Series<String, Number> placeholderSeries = new XYChart.Series<>();
+        placeholderSeries.getData().add(new XYChart.Data<>("Loading", 0));
+        data.add(placeholderSeries);
+
+        ObservableList<XYChart.Series<String, Number>> data2 = dailyEntriesChart.getData();
+        if (data2 == null) {
+            data2 = FXCollections.observableArrayList();
+            dailyEntriesChart.setData(data2);
+        }
+        XYChart.Series<String, Number> placeholderSeries2 = new XYChart.Series<>();
+        placeholderSeries2.getData().add(new XYChart.Data<>("Loading", 0));
+        data2.add(placeholderSeries2);
     }
 
-    private void updateAllData() {
-        // Fetch data in the background
+    public void updateAllData() {
         int totalUsers = UserServicesImpl.getInstance().getNumberAllUsers();
         int onlineUsers = UserServicesImpl.getInstance().getNumberAllOnlineUsers();
         int offlineUsers = UserServicesImpl.getInstance().getNumberAllOfflineUsers();
@@ -129,44 +102,46 @@ public class StatisticsController {
         Map<String, Integer> topCountriesData = UserServicesImpl.getInstance().getTopCountriesOfUsers();
         Map<String, Integer> messagesPerDay = MessageServiceImpl.getInstance().getMessagesPerDay();
 
-        // Update the UI on the JavaFX Application Thread
-        Platform.runLater(() -> {
-            // Update user statistics
-            TotalUser.setText(String.valueOf(totalUsers));
-            OnlineUser.setText(String.valueOf(onlineUsers));
-            OfflineUser.setText(String.valueOf(offlineUsers));
-            Countries.setText(String.valueOf(numberOfCountries));
-            MaleText.setText(String.format("%.2f%%", malePercentage));
-            FemaleText.setText(String.format("%.2f%%", femalePercentage));
+        totalUserLabel.setText(String.valueOf(totalUsers));
+        onlineUserLabel.setText(String.valueOf(onlineUsers));
+        offlineUserLabel.setText(String.valueOf(offlineUsers));
+        countriesLabel.setText(String.valueOf(numberOfCountries));
+        maleText.setText(String.format("%.2f%%", malePercentage));
+        femaleText.setText(String.format("%.2f%%", femalePercentage));
 
-            // Update Top Countries Chart
-            updateChart(TopCountriesChart, topCountriesData, "Users");
-
-            // Update Daily Entries Chart
-            updateDailyEntriesChart(messagesPerDay);
-
-            // Apply bar styles
-            setBarColorToBlue();
-        });
+        updateChart(topCountriesChart, topCountriesData, "Users");
+        updateDailyEntriesChart(messagesPerDay);
+        setBarColorToBlue();
     }
 
     private void updateChart(StackedBarChart<String, Number> chart, Map<String, Integer> data, String seriesName) {
-        chart.getData().clear();
+        ObservableList<XYChart.Series<String, Number>> chartData = chart.getData();
+        chartData.clear();
+
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName(seriesName);
-        data.forEach((key, value) -> series.getData().add(new XYChart.Data<>(key, value)));
-        chart.getData().add(series);
+        data.forEach((key, value) -> {
+            if (value != null && key != null) {
+                series.getData().add(new XYChart.Data<>(key, value));
+            }
+        });
+        chartData.add(series);
     }
 
     private void updateDailyEntriesChart(Map<String, Integer> actualData) {
         Map<String, Integer> messagesPerDay = initializeDaysOfWeek();
-        actualData.forEach(messagesPerDay::put);
+        actualData.forEach((key, value) -> messagesPerDay.put(key, value));
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        messagesPerDay.forEach((day, count) -> series.getData().add(new XYChart.Data<>(day, count)));
+        messagesPerDay.forEach((day, count) -> {
+            if (count != null && day != null) {
+                series.getData().add(new XYChart.Data<>(day, count));
+            }
+        });
 
-        DailyEntries.getData().clear();
-        DailyEntries.getData().add(series);
+        ObservableList<XYChart.Series<String, Number>> chartData = dailyEntriesChart.getData();
+        chartData.clear();
+        chartData.add(series);
     }
 
     private Map<String, Integer> initializeDaysOfWeek() {
@@ -181,24 +156,8 @@ public class StatisticsController {
         return daysOfWeek;
     }
 
-    private void startBackgroundUpdates() {
-        backgroundExecutor = Executors.newSingleThreadScheduledExecutor();
-        backgroundExecutor.scheduleAtFixedRate(this::updateAllData, 0, 10, TimeUnit.SECONDS); // Update every 10 seconds
-    }
-
-    public void shutdown() {
-        if (backgroundExecutor != null && !backgroundExecutor.isShutdown()) {
-            backgroundExecutor.shutdown();
-        }
-    }
-
-    public void onDestroy() {
-        shutdown();
-    }
-
-    /**************************** Chart Styles *******************************/
     private void setBarColorToBlue() {
-        for (XYChart.Series<String, Number> series : TopCountriesChart.getData()) {
+        for (XYChart.Series<String, Number> series : topCountriesChart.getData()) {
             for (XYChart.Data<String, Number> data : series.getData()) {
                 if (data.getNode() != null) {
                     data.getNode().setStyle("-fx-bar-fill: #4A90E2;");
@@ -206,7 +165,7 @@ public class StatisticsController {
             }
         }
 
-        for (XYChart.Series<String, Number> series : DailyEntries.getData()) {
+        for (XYChart.Series<String, Number> series : dailyEntriesChart.getData()) {
             for (XYChart.Data<String, Number> data : series.getData()) {
                 if (data.getNode() != null) {
                     data.getNode().setStyle("-fx-bar-fill: #4A90E2;");

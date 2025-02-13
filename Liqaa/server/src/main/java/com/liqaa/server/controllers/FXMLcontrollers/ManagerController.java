@@ -22,6 +22,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -158,22 +159,14 @@ public class ManagerController {
 
     @FXML
     public void switchToStatistics(Event event) {
-        try {
-            SceneManager.getInstance().switchScene(new Scene(FXMLLoader.load(Main.class.getResource(FilePaths.STATISTICS_SCREEN_FXML))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SceneManager.getInstance().showStatistics();
     }
 
 
 
     @FXML
     public void switchToAnnouncements(Event event) {
-        try {
-            SceneManager.getInstance().switchScene(new Scene(FXMLLoader.load(Main.class.getResource(FilePaths.ANNOUNCEMENTS_SCREEN_FXML))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SceneManager.getInstance().showAnnouncements();
     }
 
     @FXML
@@ -433,7 +426,6 @@ public class ManagerController {
 
                 System.out.println(user);
                 UserServicesImpl.getInstance().signUp(user);
-
             }
             return null;
         });
@@ -452,6 +444,7 @@ public class ManagerController {
     }
 
 
+    public void switchToManager(MouseEvent mouseEvent) {
 
-
+    }
 }

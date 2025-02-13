@@ -42,23 +42,19 @@ public class LoginController
     @FXML
     public void handleAdminLogInButton(ActionEvent actionEvent)
     {
-        try {
-            if(( adminIdTextField.getText().equals("admin"))&&(passwordTextField.getText().equals("iti123")))
-            {
-            SceneManager.getInstance().switchScene(new Scene(FXMLLoader.load(Main.class.getResource(FilePaths.MANAGER_SCREEN_FXML))));
-        }
-          else
-            {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Login Error");
-                alert.setHeaderText("Invalid Admin ID or Password");
-                alert.setContentText("Please enter a valid Admin ID and Password.");
-                alert.showAndWait();
-                adminIdTextField.clear();;
-                passwordTextField.clear();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if(( adminIdTextField.getText().equals("admin"))&&(passwordTextField.getText().equals("iti123")))
+        {
+        SceneManager.getInstance().showManager();
+    }
+      else
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Login Error");
+            alert.setHeaderText("Invalid Admin ID or Password");
+            alert.setContentText("Please enter a valid Admin ID and Password.");
+            alert.showAndWait();
+            adminIdTextField.clear();;
+            passwordTextField.clear();
         }
     }
 }

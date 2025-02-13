@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
@@ -21,75 +22,81 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="940.0" stylesheets="@../styles/notificationStyle.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.liqaa.client.controllers.FXMLcontrollers.NotificationsController">
     <left>
-        <BorderPane prefHeight="656.0" prefWidth="60.0" style="-fx-background-color: #384E6A;" BorderPane.alignment="CENTER">
+        <BorderPane BorderPane.alignment="CENTER">
             <BorderPane.margin>
                 <Insets top="-151.0" />
             </BorderPane.margin>
-            <bottom>
-                <AnchorPane prefHeight="168.0" prefWidth="58.0" BorderPane.alignment="CENTER">
-                    <children>
-                        <ImageView fx:id="settings_btn" fitHeight="35.0" fitWidth="60.0" layoutX="10.0" layoutY="60.0" onMouseClicked="#settings_action" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../images/settings.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="logout_btn" fitHeight="35.0" fitWidth="60.0" layoutX="10.0" layoutY="120.0" onMouseClicked="#logout_action" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../images/logout.png" />
-                            </image>
-                        </ImageView>
-                    </children>
-                </AnchorPane>
-            </bottom>
             <center>
-                <AnchorPane prefHeight="286.0" prefWidth="58.0" BorderPane.alignment="CENTER">
-                    <children>
-                        <ImageView fx:id="contact_btn" fitHeight="35.0" fitWidth="60.0" layoutX="12.0" layoutY="220.0" onMouseClicked="#contact_action" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../images/phone_book.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="home_btn" fitHeight="35.0" fitWidth="60.0" layoutX="11.0" layoutY="88.0" onMouseClicked="#home_action" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../images/home.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="notification_btn" fitHeight="35.0" fitWidth="60.0" layoutX="12.0" layoutY="154.0" onMouseClicked="#notification_action" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../images/active.png" />
-                            </image>
-                        </ImageView>
-                        <ImageView fx:id="chatbot_btn" fitHeight="40.0" fitWidth="65.0" layoutX="10.0" layoutY="289.0" onMouseClicked="#chatbot_action" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../images/chatbot.png" />
-                            </image>
-                        </ImageView>
-                        <Circle fx:id="profilePhoto" fill="DODGERBLUE" layoutX="29.0" layoutY="43.0" onMouseClicked="#profile_action" radius="23.0" stroke="BLACK" strokeType="INSIDE" />
-                    </children>
-                </AnchorPane>
+                <BorderPane maxWidth="68.0" minHeight="68.0" prefHeight="768.0" prefWidth="68.0" style="-fx-background-color: #384E6A; -fx-background-radius: 20 20 20 20;">
+                    <bottom>
+                        <AnchorPane prefHeight="168.0" prefWidth="58.0" BorderPane.alignment="CENTER">
+                            <children>
+                                <ImageView fx:id="settings_btn" fitHeight="35.0" fitWidth="60.0" layoutX="17.0" layoutY="66.0" onMouseClicked="#settings_action" pickOnBounds="true" preserveRatio="true" styleClass="hover-effect">
+                                    <image>
+                                        <Image url="@../images/settings.png" />
+                                    </image>
+                                </ImageView>
+                                <ImageView fx:id="logout_btn" fitHeight="35.0" fitWidth="60.0" layoutX="17.0" layoutY="121.0" onMouseClicked="#logout_action" pickOnBounds="true" preserveRatio="true" styleClass="hover-effect">
+                                    <image>
+                                        <Image url="@../images/logout.png" />
+                                    </image>
+                                </ImageView>
+                            </children>
+                        </AnchorPane>
+                    </bottom>
+                    <center>
+                        <AnchorPane prefHeight="286.0" prefWidth="58.0" BorderPane.alignment="CENTER">
+                            <children>
+                                <ImageView fx:id="contact_btn" fitHeight="35.0" fitWidth="60.0" layoutX="17.0" layoutY="224.0" onMouseClicked="#contact_action" pickOnBounds="true" preserveRatio="true" styleClass="hover-effect">
+                                    <image>
+                                        <Image url="@../images/phone_book.png" />
+                                    </image>
+                                </ImageView>
+                                <ImageView fx:id="home_btn" fitHeight="35.0" fitWidth="60.0" layoutX="17.0" layoutY="88.0" onMouseClicked="#home_action" pickOnBounds="true" preserveRatio="true" styleClass="hover-effect">
+                                    <image>
+                                        <Image url="@../images/home.png" />
+                                    </image>
+                                </ImageView>
+                                <ImageView fx:id="notification_btn" fitHeight="35.0" fitWidth="60.0" layoutX="17.0" layoutY="156.0" onMouseClicked="#notification_action" pickOnBounds="true" preserveRatio="true" styleClass="hover-effect">
+                                    <image>
+                                        <Image url="@../images/active.png" />
+                                    </image>
+                                </ImageView>
+                                <ImageView fx:id="chatbot_btn" fitHeight="40.0" fitWidth="65.0" layoutX="14.0" layoutY="292.0" onMouseClicked="#chatbot_action" pickOnBounds="true" preserveRatio="true" styleClass="hover-effect">
+                                    <image>
+                                        <Image url="@../images/chatbot.png" />
+                                    </image>
+                                </ImageView>
+                                <Circle fx:id="profilePhoto" fill="DODGERBLUE" layoutX="34.0" layoutY="43.0" onMouseClicked="#profile_action" radius="23.0" stroke="BLACK" strokeType="INSIDE" styleClass="hover-effect" />
+                            </children>
+                        </AnchorPane>
+                    </center>
+                </BorderPane>
             </center>
+            <left>
+                <Pane maxWidth="13.0" minWidth="13.0" prefHeight="656.0" prefWidth="22.0" BorderPane.alignment="CENTER" />
+            </left>
+            <top>
+                <Pane maxHeight="15.0" minHeight="15.0" prefHeight="26.0" prefWidth="0.0" BorderPane.alignment="CENTER" />
+            </top>
+            <bottom>
+                <Pane maxHeight="15.0" minHeight="15.0" prefHeight="36.0" prefWidth="0.0" BorderPane.alignment="CENTER" />
+            </bottom>
         </BorderPane>
     </left>
     <top>
-        <!-- الجزء الخاص باللوجو والـ"Notifications" بعد التعديل -->
         <AnchorPane prefHeight="154.0" prefWidth="838.0">
             <children>
-                <!-- الـ"Notifications" تفضل ثابتة -->
                 <Text fill="#384e6a" layoutX="100.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Notifications">
                     <font>
                         <Font name="Arial Bold" size="48.0" />
                     </font>
                 </Text>
-
-                <!-- اللوجو يتحرك يمينًا مع مسافة أكبر -->
                 <ImageView fitHeight="60.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="40.0">
                     <image>
                         <Image url="@../images/logo.png" />
                     </image>
                 </ImageView>
-
-                <!-- الخط يتحرك لليمين شوية علشان ميدخلش في الشاشة من الشمال -->
-                <!-- الخط يبقى أطول وينزل تحت الكلام أكتر -->
                 <Line endX="850.0" endY="120.0" startX="100.0" startY="120.0" stroke="#cdcdcd" />
             </children>
         </AnchorPane>

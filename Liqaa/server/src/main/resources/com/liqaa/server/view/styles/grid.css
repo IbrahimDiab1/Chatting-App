@@ -1,16 +1,16 @@
 .grid-container {
-    display: grid; /* Enables grid layout */
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Dynamically sized columns */
-    gap: 20px; /* Space between grid cells */
-    padding: 10px; /* Optional padding around the grid */
-    width: 100%; /* Ensure the grid container resizes responsively */
-    box-sizing: border-box; /* Include padding in the total width */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .grid-item {
-    background-color: #f4f4f4; /* Example background for items */
-    border: 1px solid #ddd; /* Example border */
-    padding: 15px; /* Internal spacing for content */
-    text-align: center; /* Example text alignment */
-    border-radius: 8px; /* Optional rounded corners */
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: center;
+    border-radius: 8px;
 }

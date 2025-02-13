@@ -4,7 +4,9 @@ import com.liqaa.client.controllers.FXMLcontrollers.components.NotificationCard1
 import com.liqaa.client.controllers.FXMLcontrollers.components.NotificationCard2Controller;
 import com.liqaa.client.controllers.services.implementations.DataCenter;
 import com.liqaa.client.controllers.services.implementations.NotificationServiceImpl;
+import com.liqaa.client.network.ServerConnection;
 import com.liqaa.client.util.SceneManager;
+import com.liqaa.client.util.Settings;
 import com.liqaa.shared.models.entities.Notification;
 import com.liqaa.shared.models.entities.User;
 import javafx.application.Platform;
@@ -119,7 +121,13 @@ public class NotificationsController implements Initializable {
     }
 
     public void logout_action(MouseEvent mouseEvent) {
-        System.out.println("logout btn is clicked");
+        Settings.clearCredentials();
+        try {
+            ServerConnection.getServer().logout(DataCenter.getInstance().getcurrentUserId());
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+        SceneManager.getInstance().showRememberedSignIn();
     }
 
     private void updateUI() {

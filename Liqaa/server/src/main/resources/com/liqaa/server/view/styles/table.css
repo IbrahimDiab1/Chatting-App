@@ -69,7 +69,9 @@
     -fx-font-weight: 500;
 }
 
-.status-busy {
+.status-busy,
+.status-available,
+.status-away {
     -fx-text-fill: #d93025;
 }
 

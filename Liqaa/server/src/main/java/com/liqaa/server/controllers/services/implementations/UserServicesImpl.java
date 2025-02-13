@@ -5,6 +5,8 @@ import com.liqaa.server.controllers.services.interfaces.UserServicesInt;
 import com.liqaa.shared.models.entities.User;
 import com.liqaa.shared.models.enums.CurrentStatus;
 import com.liqaa.shared.models.enums.Gender;
+import com.liqaa.shared.network.Client;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -42,18 +44,22 @@ public class UserServicesImpl implements UserServicesInt {
     @Override
         public boolean logout(String userPhone)
         {
-
             return UserImplementation.getUserImplementationobject().updateUserMode(userPhone,false);
         }
     @Override
         public User signUp(User user)
         {
+            System.out.println("User before in sign up: "+user);
+
             if(UserImplementation.getUserImplementationobject().insertNewUser(user))
             {
+                System.out.println("User aftter in sign up: "+user);
 
-               User userresult= UserImplementation.getUserImplementationobject().getUserbyPhone(user.getPhoneNumber());
+                User userresult= UserImplementation.getUserImplementationobject().getUserbyPhone(user.getPhoneNumber());
                 //do not retrun user's password
-                userresult.setPasswordHash(null);
+//                userresult.setPasswordHash(null);
+//                registerClient(Client.getInstance(),userresult);
+                System.out.println("User registered successfully"+ userresult);
                 return userresult;
             }
             return null;

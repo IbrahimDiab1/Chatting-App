@@ -12,4 +12,5 @@ module com.liqaa.shared {
     requires javafx.controls;
     requires java.rmi;
     requires mysql.connector.java;
+    requires jakarta.xml.bind;
 }

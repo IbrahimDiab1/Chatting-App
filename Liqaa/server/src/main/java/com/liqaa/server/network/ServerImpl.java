@@ -32,6 +32,15 @@ public class ServerImpl extends UnicastRemoteObject implements Server
         super();
     }
 
+    @Override
+    public synchronized void unregisterClient(int userId) throws RemoteException {
+        onlineClients.remove(userId);
+    }
+
+    @Override
+    public synchronized void registerClient(Client client, int id) throws RemoteException {
+        onlineClients.put(id, client);
+    }
 
     @Override
     public synchronized User signIn(Client client, String phone, String password) throws RemoteException
@@ -39,7 +48,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server
         User user= userServices.signIn(phone, password);
         System.out.println("User in sign in: "+user);
         if(user!=null) {
-            System.out.println("test");
+//            System.out.println("test");
             onlineClients.put(user.getId(), client);
 
             return user;
@@ -47,10 +56,7 @@ public class ServerImpl extends UnicastRemoteObject implements Server
         return null;
     }
 
-    @Override
-    public synchronized void unregisterClient(int userId) throws RemoteException {
-        onlineClients.remove(userId);
-    }
+
 
     private void notifyClientsAboutMessage(Message message) {
         onlineClients.forEach((userId, client) -> {
@@ -82,8 +88,8 @@ public class ServerImpl extends UnicastRemoteObject implements Server
 
 
     @Override
-    public boolean logout(String userPhone) throws RemoteException {
-        return userServices.logout(userPhone);
+    public void logout(int userId) throws RemoteException {
+        onlineClients.remove(userId);
     }
 
     @Override
@@ -487,5 +493,11 @@ public class ServerImpl extends UnicastRemoteObject implements Server
     @Override
     public String ping() throws RemoteException {
         return "Connection established";
+    }
+
+    @Override
+    public String getResponse(String userMessage) throws RemoteException {
+//        return GeminiAPI.getBotResponse(userMessage);
+        return null;
     }
 }

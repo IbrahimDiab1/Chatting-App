@@ -29,21 +29,13 @@ public class AnnouncementsController {
     @javafx.fxml.FXML
     public void switchToStatistics(Event event)
     {
-        try {
-            SceneManager.getInstance().switchScene(new Scene(FXMLLoader.load(Main.class.getResource(FilePaths.STATISTICS_SCREEN_FXML))));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        SceneManager.getInstance().showStatistics();
     }
 
     @javafx.fxml.FXML
     public void switchToAnnouncements(Event event)
     {
-        try {
-            SceneManager.getInstance().switchScene(new Scene(FXMLLoader.load(Main.class.getResource(FilePaths.ANNOUNCEMENTS_SCREEN_FXML))));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        SceneManager.getInstance().showAnnouncements();
     }
 
     @javafx.fxml.FXML
@@ -63,10 +55,6 @@ public class AnnouncementsController {
     @javafx.fxml.FXML
     public void switchToManager(Event event)
     {
-        try {
-            SceneManager.getInstance().switchScene(new Scene(FXMLLoader.load(Main.class.getResource(FilePaths.MANAGER_SCREEN_FXML))));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        SceneManager.getInstance().showManager();
     }
 }
