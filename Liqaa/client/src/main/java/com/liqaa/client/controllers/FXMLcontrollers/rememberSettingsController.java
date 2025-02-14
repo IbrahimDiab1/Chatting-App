@@ -15,10 +15,13 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.Properties;
 
 public class rememberSettingsController {
 
@@ -56,6 +59,12 @@ public class rememberSettingsController {
 
         userName.setText(Settings.getSavedUser().getDisplayName());
 
+        byte[] profilePictureData = Settings.getSavedUser().getProfilepicture();
+        if (profilePictureData != null) {
+            CircleImage.setImage(new Image(new ByteArrayInputStream(profilePictureData)));
+        } else {
+            CircleImage.setImage(new Image(getClass().getResourceAsStream("/com/liqaa/client/view/images/defaultProfileImage.png")));
+        }
         setImage("/com/liqaa/client/view/images/password2.png");
     }
     @FXML
@@ -135,8 +144,6 @@ public class rememberSettingsController {
         }
 
         Image newImage = new Image(imageUrl.toString());
-
-        // ضبط الصورة دون تغيير الحجم
         passwordToggleImage.setImage(newImage);
     }
 

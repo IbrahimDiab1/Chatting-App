@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane onKeyPressed="#handleKeyPressed" prefHeight="768" prefWidth="1200" stylesheets="@../styles/style1.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.liqaa.client.controllers.FXMLcontrollers.PrimaryController">
@@ -164,11 +165,7 @@
                      <top>
                         <AnchorPane prefHeight="343.0" prefWidth="70.0" stylesheets="@../styles/hovor.css" BorderPane.alignment="CENTER">
                            <children>
-                              <ImageView fx:id="profile_btn" fitHeight="46.0" fitWidth="68.0" layoutX="8.0" layoutY="20.0" onMouseClicked="#profile_action" pickOnBounds="true" preserveRatio="true" styleClass="hover-effect">
-                                 <image>
-                                    <Image url="@../images/defaultProfileImage.png" />
-                                 </image>
-                              </ImageView>
+                              <Circle fx:id="profileImage" fill="DODGERBLUE" layoutX="34.0" layoutY="43.0" onMouseClicked="#showProfile" radius="23.0" stroke="BLACK" strokeType="INSIDE" />
                               <ImageView fx:id="home_btn" fitHeight="35.0" fitWidth="60.0" layoutX="17.0" layoutY="88.0" onMouseClicked="#home_action" pickOnBounds="true" preserveRatio="true" styleClass="hover-effect">
                                  <image>
                                     <Image url="@../images/home.png" />

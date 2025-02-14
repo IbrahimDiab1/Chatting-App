@@ -96,8 +96,11 @@ public class Settings {
 
             // Load the user's profile picture if available
             String photoPath = props.getProperty("photoPath");
+            System.out.println("before in the settings.java: photoPath: " + photoPath);
             if (photoPath != null && new File(photoPath).exists()) {
+                System.out.println("after in the settings: photoPath: " + photoPath);
                 user.setProfilepicture(loadPhoto(photoPath));
+
             }
 
             return user;

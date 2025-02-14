@@ -159,7 +159,7 @@
          <top>
             <AnchorPane prefHeight="343.0" prefWidth="70.0" stylesheets="@../styles/hovor.css" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fx:id="profile_btn" fitHeight="43.0" fitWidth="68.0" layoutX="13.0" layoutY="20.0" onMouseClicked="#profile_action" pickOnBounds="true" preserveRatio="true" styleClass="hover-effect">
+                  <ImageView fx:id="profile_btn" fitHeight="43.0" fitWidth="68.0" layoutX="13.0" layoutY="20.0" onMouseClicked="#showProfile" pickOnBounds="true" preserveRatio="true" styleClass="hover-effect">
                      <image>
                         <Image url="@../images/profile.png" />
                      </image>
