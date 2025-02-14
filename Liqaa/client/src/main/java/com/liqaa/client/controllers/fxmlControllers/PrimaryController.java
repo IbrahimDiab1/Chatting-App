@@ -21,13 +21,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -36,9 +34,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import javafx.scene.layout.StackPane;
 import javafx.geometry.Pos;
@@ -46,6 +45,7 @@ import javafx.geometry.Pos;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.rmi.RemoteException;
 import java.time.LocalDateTime;
@@ -83,8 +83,6 @@ public class PrimaryController
     @FXML
     private ImageView home_btn;
     @FXML
-    private ImageView profile_btn;
-    @FXML
     private ImageView notification_btn;
     @FXML
         private ImageView settings_btn;
@@ -106,6 +104,8 @@ public class PrimaryController
     private TextField search;
     @FXML
     private ImageView send;
+    @FXML
+    private Circle profileImage;
 
     private ListCell<Message> createMessageCell(ListView<Message> param)
     {
@@ -183,6 +183,17 @@ public class PrimaryController
     @FXML
         public void initialize()
         {
+            byte[] userPhoto = DataCenter.getInstance().getCurrentUser().getProfilepicture();
+            if (userPhoto == null) {
+                Image image = new Image(getClass().getResourceAsStream("/com/liqaa/client/view/images/defaultProfileImage.png"));
+                profileImage.setFill(new ImagePattern(image));
+            } else {
+                InputStream inputStream = new ByteArrayInputStream(userPhoto);
+                Image image = new Image(inputStream);
+                profileImage.setFill(new ImagePattern(image));
+            }
+            profileImage.setStroke(null);
+
 
             FilteredList<ChatInfo> filteredData = new FilteredList<>(DataCenter.getInstance().getChats(), p -> true);
 
@@ -361,7 +372,7 @@ public class PrimaryController
         }
     }
     @FXML
-    public void profile_action(MouseEvent mouseEvent) {
+    public void showProfile(MouseEvent mouseEvent) {
         System.out.println("profile btn is clicked");
         // Opens the user info scene in a new, undecorated stage.
         SceneManager.getInstance().showUserInfoSceneInNewStage();
