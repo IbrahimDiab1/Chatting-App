@@ -6,29 +6,28 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.control.Pagination?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Circle?>
 
-<?import javafx.scene.layout.Pane?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="940.0" stylesheets="@../styles/contactStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.liqaa.client.controllers.FXMLcontrollers.ContactsController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="940.0" stylesheets="@../styles/contactStyle.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.liqaa.client.controllers.FXMLcontrollers.ContactsController">
     <left>
         <BorderPane BorderPane.alignment="CENTER">
             <BorderPane.margin>
                 <Insets top="-151.0" />
             </BorderPane.margin>
             <center>
-                <BorderPane maxWidth="68.0" minHeight="68.0" prefHeight="768.0" prefWidth="68.0" style="-fx-background-color: #384E6A; -fx-background-radius: 20 20 20 20;" stylesheets="@../styles/hover.css">
+                <BorderPane maxWidth="68.0" minHeight="68.0" prefHeight="768.0" prefWidth="68.0" style="-fx-background-color: #384E6A; -fx-background-radius: 20 20 20 20;" stylesheets="@../styles/hovor.css">
                     <bottom>
                         <AnchorPane prefHeight="168.0" prefWidth="58.0" BorderPane.alignment="CENTER">
                             <children>
@@ -125,7 +124,7 @@
                     </GridPane.margin>
                     <children>
                         <!-- Search Field with Icon -->
-                        <HBox prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: rgba(56,78,106,0.34); -fx-background-radius: 20;" alignment="CENTER_LEFT">
+                        <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: rgba(56,78,106,0.34); -fx-background-radius: 20;">
                             <children>
                                 <ImageView fitHeight="22.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -135,9 +134,9 @@
                                         <Insets left="15.0" />
                                     </HBox.margin>
                                 </ImageView>
-                                <TextField fx:id="searchField" promptText="Search Here..." styleClass="search-field" prefWidth="150.0" prefHeight="40.0">
+                                <TextField fx:id="searchField" prefHeight="40.0" prefWidth="150.0" promptText="Search Here..." styleClass="search-field">
                                     <padding>
-                                        <Insets top="10.0" right="5.0" bottom="10.0" left="5.0" />
+                                        <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
                                     </padding>
                                 </TextField>
                             </children>
@@ -170,35 +169,35 @@
                 <VBox spacing="10" styleClass="container" GridPane.rowIndex="2">
                     <children>
                         <!-- Titles HBox -->
-                        <HBox alignment="CENTER_LEFT" styleClass="title-box" style="-fx-background-color: #384E6A; -fx-padding: 10; -fx-background-radius: 30;">
+                        <HBox alignment="CENTER_LEFT" style="-fx-background-color: #384E6A; -fx-padding: 10; -fx-background-radius: 30;" styleClass="title-box">
                             <padding>
-                                <Insets top="10" right="10" bottom="10" left="10"/>
+                                <Insets bottom="10" left="10" right="10" top="10" />
                             </padding>
                             <children>
                                 <!-- Name -->
-                                <Text text="Name" styleClass="title-text" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" HBox.hgrow="ALWAYS" />
-                                <Region prefWidth="150"/> <!-- المسافة بين Name و Phone -->
+                                <Text style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" styleClass="title-text" text="Name" HBox.hgrow="ALWAYS" />
+                                <Region prefWidth="150" /> <!-- المسافة بين Name و Phone -->
                                 <!-- Phone -->
-                                <Text text="Phone" styleClass="title-text" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" HBox.hgrow="ALWAYS" />
-                                <Region prefWidth="65"/> <!-- المسافة بين Phone و Bio -->
+                                <Text style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" styleClass="title-text" text="Phone" HBox.hgrow="ALWAYS" />
+                                <Region prefWidth="65" /> <!-- المسافة بين Phone و Bio -->
                                 <!-- Bio -->
-                                <Text text="Bio" styleClass="title-text" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" HBox.hgrow="ALWAYS" />
-                                <Region prefWidth="125"/> <!-- المسافة بين Bio و Status -->
+                                <Text style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" styleClass="title-text" text="Bio" HBox.hgrow="ALWAYS" />
+                                <Region prefWidth="125" /> <!-- المسافة بين Bio و Status -->
                                 <!-- Status -->
-                                <Text text="Status" styleClass="title-text" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" HBox.hgrow="ALWAYS" />
-                                <Region prefWidth="45"/> <!-- المسافة بين Status و Category -->
+                                <Text style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" styleClass="title-text" text="Status" HBox.hgrow="ALWAYS" />
+                                <Region prefWidth="45" /> <!-- المسافة بين Status و Category -->
                                 <!-- Category -->
-                                <Text text="Category" styleClass="title-text" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" HBox.hgrow="ALWAYS" />
-                                <Region prefWidth="70"/> <!-- المسافة بين Category و Action -->
+                                <Text style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" styleClass="title-text" text="Category" HBox.hgrow="ALWAYS" />
+                                <Region prefWidth="70" /> <!-- المسافة بين Category و Action -->
                                 <!-- Action -->
-                                <Text text="Action" styleClass="title-text" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" HBox.hgrow="ALWAYS" />
+                                <Text style="-fx-font-weight: bold; -fx-font-size: 14; -fx-fill: white;" styleClass="title-text" text="Action" HBox.hgrow="ALWAYS" />
                             </children>
                         </HBox>
 
                         <!-- Contacts ListView -->
                         <ListView fx:id="contactsList" prefHeight="360.0" prefWidth="800" style="-fx-padding: 10; -fx-border-radius: 15; -fx-background-radius: 15;">
                             <padding>
-                                <Insets top="10" right="10" bottom="10" left="10"/>
+                                <Insets bottom="10" left="10" right="10" top="10" />
                             </padding>
                         </ListView>
                     </children>

@@ -112,7 +112,10 @@ public class SignUp2Controller {
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }
+//                    DataCenter.getInstance().getcurrentUserId()
+//                    ServerConnection.getServer().updateUserInfo();
                     SceneManager.getInstance().showPrimaryScene();
+                    // todo: update isActive
                 } else {
                     showErrorAlert("Registration Failed", "User already exists");
                 }

@@ -4,9 +4,7 @@ import com.liqaa.client.controllers.FXMLcontrollers.components.NotificationCard1
 import com.liqaa.client.controllers.FXMLcontrollers.components.NotificationCard2Controller;
 import com.liqaa.client.controllers.services.implementations.DataCenter;
 import com.liqaa.client.controllers.services.implementations.NotificationServiceImpl;
-import com.liqaa.client.network.ServerConnection;
 import com.liqaa.client.util.SceneManager;
-import com.liqaa.client.util.Settings;
 import com.liqaa.shared.models.entities.Notification;
 import com.liqaa.shared.models.entities.User;
 import javafx.application.Platform;
@@ -121,13 +119,7 @@ public class NotificationsController implements Initializable {
     }
 
     public void logout_action(MouseEvent mouseEvent) {
-        Settings.clearCredentials();
-        try {
-            ServerConnection.getServer().logout(DataCenter.getInstance().getcurrentUserId());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        SceneManager.getInstance().showRememberedSignIn();
+        System.out.println("logout btn is clicked");
     }
 
     private void updateUI() {
@@ -174,7 +166,7 @@ public class NotificationsController implements Initializable {
         });
         Runnable task = () -> {
             if(curTab.equals("all")){
-                loadAllNotifications();
+                Platform.runLater(this::loadAllNotifications);
             }
         };
         executor.scheduleAtFixedRate(task, 0, 1, TimeUnit.SECONDS);
@@ -298,7 +290,7 @@ public class NotificationsController implements Initializable {
 
     public void loadAllAcceptedInvitations() {
         try {
-            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAllAcceptedInvitations(7); // replace 7 with the current user id
+            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAllAcceptedInvitations(DataCenter.getInstance().getcurrentUserId());
             Platform.runLater(() -> {
                 notificationList.clear();
                 notificationList.addAll(newNotifications);
@@ -310,7 +302,7 @@ public class NotificationsController implements Initializable {
 
     public void loadAllDeclinedInvitations() {
         try {
-            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAllDeclinedInvitations(7); // replace it with the current user id
+            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAllDeclinedInvitations(DataCenter.getInstance().getcurrentUserId()); // replace it with the current user id
             Platform.runLater(() -> {
                 notificationList.clear();
                 notificationList.addAll(newNotifications);
@@ -322,7 +314,7 @@ public class NotificationsController implements Initializable {
 
     public void loadUpcomingRequests() {
         try {
-            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAllFriendRequests(7); // replace it with the current user id
+            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAllFriendRequests(DataCenter.getInstance().getcurrentUserId());
             Platform.runLater(() -> {
                 notificationList.clear();
                 notificationList.addAll(newNotifications);
@@ -334,7 +326,7 @@ public class NotificationsController implements Initializable {
 
     public void loadAnnouncements() {
         try {
-            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAnnouncements(7); // replace it with the current user id
+            List<Notification> newNotifications = NotificationServiceImpl.getInstance().getAnnouncements(DataCenter.getInstance().getcurrentUserId());
             Platform.runLater(() -> {
                 notificationList.clear();
                 notificationList.addAll(newNotifications);

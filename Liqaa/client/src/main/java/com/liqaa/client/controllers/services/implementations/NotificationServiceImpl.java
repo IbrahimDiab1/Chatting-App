@@ -2,6 +2,7 @@ package com.liqaa.client.controllers.services.implementations;
 
 import com.liqaa.client.controllers.services.interfaces.NotificationService;
 import com.liqaa.client.network.ServerConnection;
+import com.liqaa.shared.models.ChatInfo;
 import com.liqaa.shared.models.entities.Announcement;
 import com.liqaa.shared.models.entities.AnnouncementNotification;
 import com.liqaa.shared.models.entities.Notification;
@@ -64,5 +65,25 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public Boolean addToContactList(int userId, int newContactId) throws RemoteException{
         return ServerConnection.getServer().addContact(userId, newContactId);
+    }
+
+    @Override
+    public ChatInfo createDirectConversation(int userId, User otherUserId) throws RemoteException{
+        return ServerConnection.getServer().createDirectConversation(DataCenter.getInstance().getcurrentUserId(), otherUserId);
+    }
+
+    @Override
+    public User getUserInfoById(int userId) throws RemoteException{
+        return ServerConnection.getServer().getUserInfoById(userId);
+    }
+
+    @Override
+    public boolean addContact (int userId, int contactId) throws RemoteException{
+        return ServerConnection.getServer().addContact(userId, contactId);
+    }
+
+    @Override
+    public boolean createNotification(Notification notification) throws SQLException, RemoteException{
+        return ServerConnection.getServer().createNotification(notification);
     }
 }

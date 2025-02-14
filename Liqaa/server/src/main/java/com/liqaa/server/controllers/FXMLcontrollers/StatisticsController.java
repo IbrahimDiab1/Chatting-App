@@ -1,11 +1,15 @@
 package com.liqaa.server.controllers.FXMLcontrollers;
 
+import com.liqaa.server.Main;
 import com.liqaa.server.controllers.services.implementations.MessageServiceImpl;
 import com.liqaa.server.controllers.services.implementations.UserServicesImpl;
+import com.liqaa.server.util.FilePaths;
 import com.liqaa.server.util.SceneManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.StackedBarChart;
@@ -15,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

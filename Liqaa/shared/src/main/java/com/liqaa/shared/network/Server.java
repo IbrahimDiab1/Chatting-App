@@ -104,6 +104,9 @@ public interface Server extends Remote
     public List<FriendRequests> getUserFriendRequests(int userID) throws RemoteException; // when calling , check if empty list or not
     public boolean updateFriendsRequestStatus( FriendRequests updatedRequest) throws RemoteException;//rejected>>remove request , Accepted>>add contact
     public boolean sendFriendRequest( FriendRequests addRequests) throws RemoteException;
+
+    boolean createNotification(Notification notification) throws SQLException, RemoteException;
+
     public  boolean addContact (int userId , int contactId) throws RemoteException;
     public boolean deleteContact (int userId , int contactId) throws RemoteException;
     public  boolean blockContact (int userId , int contactId) throws RemoteException;

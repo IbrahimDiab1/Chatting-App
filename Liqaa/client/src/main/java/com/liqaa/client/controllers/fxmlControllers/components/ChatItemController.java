@@ -8,6 +8,7 @@ import javafx.scene.shape.Circle;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 
+import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 
 public class ChatItemController {
@@ -31,16 +32,18 @@ public class ChatItemController {
         this.chatInfo = chatInfo;
         name.setText(chatInfo.getName());
         if (chatInfo.getImage() != null)
-            image.setImage(new javafx.scene.image.Image(Arrays.toString(chatInfo.getImage())));
+            image.setImage(new javafx.scene.image.Image(new ByteArrayInputStream(chatInfo.getImage())));
         else if (chatInfo.getType() == ConversationType.GROUP)
             image.setImage(new javafx.scene.image.Image(getClass().getResourceAsStream("/com/liqaa/client/view/images/defaultGroupProfile.png")));
         else
             image.setImage(new javafx.scene.image.Image(getClass().getResourceAsStream("/com/liqaa/client/view/images/defaultProfileImage.png")));
-
         msgCounter.setText(String.valueOf(chatInfo.getUnreadMsgCount()));
         java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("hh:mm a");
-        lastMsgTime.setText(chatInfo.getLastMsgTime().format(formatter));
-
+        if (chatInfo.getLastMsgTime() != null) {
+            lastMsgTime.setText(chatInfo.getLastMsgTime().format(formatter));
+        } else {
+            lastMsgTime.setText("");
+        }
         status.setTextFill(javafx.scene.paint.Color.GRAY);
         if (chatInfo.getType() == ConversationType.GROUP) {
             status.setText("");

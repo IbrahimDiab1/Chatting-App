@@ -7,6 +7,7 @@ module com.liqaa.server {
     requires com.zaxxer.hikari;
     requires org.slf4j;
     requires java.rmi;
+
 //    requires org.json;
 //    requires jakarta.xml.bind;
 //    requires java.desktop;

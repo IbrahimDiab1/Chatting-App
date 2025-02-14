@@ -2,13 +2,12 @@ package com.liqaa.client.controllers.services.implementations;
 
 import com.liqaa.client.controllers.services.interfaces.ContactService;
 import com.liqaa.client.network.ServerConnection;
-import com.liqaa.shared.models.entities.Group;
-import com.liqaa.shared.models.entities.User;
-import com.liqaa.shared.models.entities.Category;
+import com.liqaa.shared.models.entities.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,52 +26,23 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public ObservableList<User> getContacts(int userId) {
-        ObservableList<User> contacts = FXCollections.observableArrayList();
-        // التواصل مع السيرفر للحصول على قائمة الاتصالات
-        try {
-            contacts.addAll(ServerConnection.getServer().getUserFriends(userId));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return contacts;
+        return null;
     }
 
     @Override
     public ObservableList<Category> getCategoriesForContact(int userId, int contactId) {
-        ObservableList<Category> categories = FXCollections.observableArrayList();
-        // التواصل مع السيرفر للحصول على الفئات الخاصة بالاتصال
-        try {
-            categories.addAll(ServerConnection.getServer().getCategoriesForContact(userId, contactId));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return categories;
+        return null;
     }
 
     @Override
     public boolean deleteContact(int userId, int contactId) {
-        // التواصل مع السيرفر لحذف الاتصال
-        try {
-            ServerConnection.getServer().deleteContact(userId, contactId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        return false;
     }
 
     @Override
     public boolean renameCategory(int categoryId, String newName) {
-        try {
-            ServerConnection.getServer().renameCategory(categoryId, newName);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
+        return false;
     }
-
 
     @Override
     public List<User> getUserFriends(int userId) throws RemoteException{
@@ -127,5 +97,20 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public boolean isBlocked(int userId, int contactId) throws RemoteException{
         return ServerConnection.getServer().isBlocked(userId, contactId);
+    }
+
+    @Override
+    public void removeCategory(String categoryName, int userId) throws RemoteException{
+        ServerConnection.getServer().removeCategory(categoryName, userId);
+    }
+
+    @Override
+    public boolean sendFriendRequest( FriendRequests addRequests) throws RemoteException{
+        return ServerConnection.getServer().sendFriendRequest(addRequests);
+    }
+
+    @Override
+    public boolean createNotification(Notification notification) throws SQLException, RemoteException{
+        return ServerConnection.getServer().createNotification(notification);
     }
 }

@@ -415,6 +415,11 @@ public class ServerImpl extends UnicastRemoteObject implements Server
     }
 
     @Override
+    public boolean createNotification(Notification notification) throws SQLException, RemoteException{
+        return NotificationServiceImpl.getInstance().createNotification(notification);
+    }
+
+    @Override
     public boolean addContact(int userId, int contactId) throws RemoteException {
         return ContactServicesImpl.getInstance().addContact(userId,contactId);
     }

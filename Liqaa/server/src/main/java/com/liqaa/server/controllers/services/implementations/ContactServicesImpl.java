@@ -95,6 +95,6 @@ public class ContactServicesImpl implements ContactServicesInt {
 
     @Override
     public boolean isBlocked(int userId, int contactId) {
-        return ContactImplementation.getContactImplObject().isContact(userId, contactId);
+        return ContactImplementation.getContactImplObject().isBlocked(userId, contactId);
     }
 }

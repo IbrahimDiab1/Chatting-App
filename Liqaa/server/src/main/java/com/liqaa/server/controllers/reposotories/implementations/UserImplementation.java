@@ -38,8 +38,9 @@ public  static void main(String args[])
     System.out.println(s.updateUserImage ("1234567890",s.getUserById(5).getProfilepicture()));
 }
     @Override
-    public boolean isPhoneNumberExists(String phoneNumber) {
-        String query = "SELECT 1 FROM users WHERE phone_number = ? LIMIT 1";
+   public boolean isPhoneNumberExists(String phoneNumber)
+    {
+        String query = "Select * from users where phone_number = ?";
         try (Connection connection = DatabaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             phoneNumber = phoneNumber.trim(); // Normalize input

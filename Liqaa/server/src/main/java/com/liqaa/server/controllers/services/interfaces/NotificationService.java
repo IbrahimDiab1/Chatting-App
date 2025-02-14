@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface NotificationService {
+    boolean createNotification(Notification notification) throws SQLException;
     List<Notification> getUserNotifications(int userId) throws SQLException;
     List<Notification> getUpcomingRequests(int recipientId) throws SQLException;
     List<Notification> getAcceptedInvitations(int recipientId) throws SQLException;

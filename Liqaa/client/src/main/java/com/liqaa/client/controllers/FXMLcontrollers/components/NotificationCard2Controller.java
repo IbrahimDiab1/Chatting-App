@@ -6,6 +6,7 @@ import com.liqaa.client.controllers.services.implementations.NotificationService
 import com.liqaa.client.util.DateFormatter;
 import com.liqaa.shared.models.entities.Notification;
 import com.liqaa.shared.models.entities.User;
+import com.liqaa.shared.models.enums.NotificationType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -68,14 +69,16 @@ public class NotificationCard2Controller implements Initializable {
     }
 
     public void acceptAction() throws SQLException, RemoteException {
-        NotificationServiceImpl.getInstance().addToContactList(7, senderId); // replace 7 with the current user ID
+        NotificationServiceImpl.getInstance().addToContactList(DataCenter.getInstance().getcurrentUserId(), senderId);
         NotificationServiceImpl.getInstance().deleteNotification(curNotificationId);
-        // ConversationServices.getInstance().createDirectConversation(DataCenter.getInstance().getcurrentUserId(),senderId);
-        // todo: create a direct conversation
+        NotificationServiceImpl.getInstance().addContact(DataCenter.getInstance().getcurrentUserId(), senderId);
+        NotificationServiceImpl.getInstance().addContact(senderId, DataCenter.getInstance().getcurrentUserId());
+        NotificationServiceImpl.getInstance().createNotification(new Notification(senderId, DataCenter.getInstance().getcurrentUserId(), NotificationType.REQUEST_ACCEPTED, false));
+        NotificationServiceImpl.getInstance().createDirectConversation(DataCenter.getInstance().getcurrentUserId(), NotificationServiceImpl.getInstance().getUserInfoById(senderId));
     }
 
     public void declineAction() throws SQLException, RemoteException {
         NotificationServiceImpl.getInstance().deleteNotification(curNotificationId);
-        // todo: delete direct conversation
+        NotificationServiceImpl.getInstance().createNotification(new Notification(senderId, DataCenter.getInstance().getcurrentUserId(), NotificationType.REQUEST_DECLINED, false));
     }
 }
