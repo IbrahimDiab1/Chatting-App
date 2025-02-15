@@ -22,10 +22,10 @@
                      <children>
                         <ImageView fx:id="senderImage" fitHeight="57.0" fitWidth="74.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/defaultProfileImage.png" />
+                              <Image url="@../../images/ZoOoMA.jpg" />
                            </image>
                         </ImageView>
-                        <Text fx:id="senderName" fill="#595757e8" layoutX="65.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ibrahim Diab" wrappingWidth="177.6000023516508">
+                        <Text fx:id="senderName" fill="#595757e8" layoutX="65.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hazim Karam" wrappingWidth="177.6000023516508">
                            <font>
                               <Font name="Roboto Bold Italic" size="14.0" />
                            </font>

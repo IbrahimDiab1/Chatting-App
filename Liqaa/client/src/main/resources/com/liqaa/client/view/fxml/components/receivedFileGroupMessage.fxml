@@ -65,10 +65,10 @@
             </AnchorPane>
             <ImageView fx:id="senderImage" fitHeight="57.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../images/defaultProfileImage.png" />
+                  <Image url="@../../images/ZoOoMA.jpg" />
                </image>
             </ImageView>
-            <Text fx:id="senderName" fill="#595757" layoutX="59.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ibrahim Diab" wrappingWidth="138.399996662763">
+            <Text fx:id="senderName" fill="#595757" layoutX="59.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hazim Karam" wrappingWidth="138.399996662763">
                <font>
                   <Font name="Roboto Bold Italic" size="14.0" />
                </font>
