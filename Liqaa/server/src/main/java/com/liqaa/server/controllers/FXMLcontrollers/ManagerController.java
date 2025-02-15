@@ -154,15 +154,14 @@ public class ManagerController {
     @FXML
     public void logout(Event event) {
         System.out.println("manager exit");
-
+        SceneManager.getInstance().showLogin();
     }
 
     @FXML
     public void switchToStatistics(Event event) {
+        System.out.println("switchToStatistics called");
         SceneManager.getInstance().showStatistics();
     }
-
-
 
     @FXML
     public void switchToAnnouncements(Event event) {

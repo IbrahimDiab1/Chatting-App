@@ -7,6 +7,7 @@ import com.liqaa.server.util.SceneManager;
 import com.liqaa.shared.models.entities.Announcement;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -24,13 +25,19 @@ public class AnnouncementsController {
 
     @javafx.fxml.FXML
     public void logout(Event event) {
+        System.out.println("logout called");
+        SceneManager.getInstance().showLogin();
     }
 
-    @javafx.fxml.FXML
-    public void switchToStatistics(Event event)
-    {
+    @FXML
+    public void switchToStatistics(Event event) {
+        System.out.println("switchToStatistics called");
         SceneManager.getInstance().showStatistics();
     }
+
+
+
+
 
     @javafx.fxml.FXML
     public void switchToAnnouncements(Event event)

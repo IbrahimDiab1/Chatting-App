@@ -86,6 +86,7 @@ public class SceneManager
             stage.setHeight(height);
             setCurrentScene(SceneType.Statistics);
         } catch (IOException e) {
+            System.err.println("Failed to load statistics.fxml: " + e.getMessage());
             e.printStackTrace();
         }
     }
