@@ -24,6 +24,12 @@ public class AnnouncementsController {
 
     @javafx.fxml.FXML
     public void logout(Event event) {
+        try {
+            SceneManager.getInstance().switchScene(new Scene(FXMLLoader.load(Main.class.getResource(FilePaths.LOGIN_SCREEN_FXML))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @javafx.fxml.FXML

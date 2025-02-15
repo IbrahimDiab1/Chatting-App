@@ -70,6 +70,12 @@ public class StatisticsController {
     @FXML
     public void logout(MouseEvent event) {
         System.out.println("Logging out...");
+        try {
+            SceneManager.getInstance().switchScene(new Scene(FXMLLoader.load(Main.class.getResource(FilePaths.LOGIN_SCREEN_FXML))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @FXML
@@ -129,8 +135,8 @@ public class StatisticsController {
             OnlineUser.setText(String.valueOf(onlineUsers));
             OfflineUser.setText(String.valueOf(offlineUsers));
             Countries.setText(String.valueOf(numberOfCountries));
-            MaleText.setText(String.format("%.2f%%", malePercentage));
-            FemaleText.setText(String.format("%.2f%%", femalePercentage));
+            MaleText.setText(String.valueOf( (int)malePercentage+"%"));
+            FemaleText.setText(String.valueOf( (int)femalePercentage+"%"));
 
             // Update Top Countries Chart
             updateChart(TopCountriesChart, topCountriesData, "Users");

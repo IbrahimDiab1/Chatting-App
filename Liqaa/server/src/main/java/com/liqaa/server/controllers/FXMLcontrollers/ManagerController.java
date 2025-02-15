@@ -153,6 +153,11 @@ public class ManagerController {
     @javafx.fxml.FXML
     public void logout(Event event) {
         System.out.println("manager exit");
+        try {
+            SceneManager.getInstance().switchScene(new Scene(FXMLLoader.load(Main.class.getResource(FilePaths.LOGIN_SCREEN_FXML))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
