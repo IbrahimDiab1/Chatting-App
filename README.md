@@ -112,9 +112,10 @@ java -jar client/target/client-1.0-SNAPSHOT.jar
 
 ## Development Team
 - Ibrahim Diab (Project lead)
-- Mohamed Karam
+- [Hazim Karam](https://github.com/Hazim-Karam159)
 - Alaa Hathout
 - Salma Abdelnaser
+
 
 ## License
 This project is licensed under the MIT License.
